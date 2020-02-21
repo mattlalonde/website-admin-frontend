@@ -1,0 +1,26 @@
+[
+    {
+        "createdTimestamp": "2020-02-16T00:00:00.000Z",
+        "ownerUserId": "user1",
+        "articleId": "article1",
+        "title": "title 1",
+        "precis": "introduction",
+        "published": false
+    },
+    {
+        "createdTimestamp": "2020-02-16T00:00:00.000Z",
+        "ownerUserId": "user1",
+        "articleId": "article2",
+        "title": "title 2",
+        "precis": "introduction",
+        "published": false
+    },
+    {
+        "createdTimestamp": "2020-02-16T00:00:00.000Z",
+        "ownerUserId": "user1",
+        "articleId": "article3",
+        "title": "title 3",
+        "precis": "introduction",
+        "published": false
+    }
+]
