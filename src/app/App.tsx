@@ -2,11 +2,14 @@ import React, { FunctionComponent } from 'react';
 import { Store } from 'redux'
 import { History } from 'history'
 import { Provider } from 'react-redux';
-import { RootState } from './rootReducer';
+import { ConnectedRouter } from 'connected-react-router'
+
+import { RootState } from './store';
+import Routes from './routes';
 
 import './App.css';
 
-import { ArticleListPage } from '../features/articles/list/ArticleListPage';
+
 
 interface IAppProps {
   store: Store<RootState>,
@@ -17,7 +20,11 @@ const App : FunctionComponent<IAppProps> = ({store, history}) => {
 
 
   return (
-    <ArticleListPage />
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Routes />
+      </ConnectedRouter>
+    </Provider>
   );
 }
 

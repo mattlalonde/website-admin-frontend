@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useEffect } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
 
 import { loadArticlesRequest, IArticleListItem } from './articleListSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../app/rootReducer';
+import { RootState } from '../../../app/store';
 
 interface IArticleListProps {
     articles: Array<IArticleListItem>;

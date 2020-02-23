@@ -12,12 +12,14 @@ interface IArticle {
 
 interface IArticleDetailsState {
     loadedArticle: IArticle | null;
+    isLoading: boolean;
     isSaving: boolean;
     error: Error | string | null;
 }
 
 const initialState: IArticleDetailsState = {
     loadedArticle: null,
+    isLoading: false,
     isSaving: false,
     error: null
 };
@@ -26,7 +28,22 @@ const articleDetails = createSlice({
     name: 'articleDetails',
     initialState,
     reducers: {
+        loadArticleRequest(state, action: PayloadAction<string>) {
+            state.isLoading = true;
+            state.isSaving = false;
+            state.error = null;
+        },
+        loadArticleSuccess(state, action: PayloadAction<IArticle>) {
+            state.isLoading = false;
+            state.loadedArticle = action.payload;
+        },
+        loadArticleFailed(state, action: PayloadAction<{error: string}>) {
+            state.isLoading = false;
+            state.loadedArticle = null;
+            state.error = action.payload.error;
+        },
         updateTitleRequest(state) {
+            state.isLoading = false;
             state.isSaving = true;
             state.error = null;
         },
@@ -46,6 +63,7 @@ const articleDetails = createSlice({
         },
         updateBodyRequest(state) {
             state.isSaving = true;
+            state.isLoading = false;
             state.error = null;
         },
         updateBodySuccess(state, action: PayloadAction<{articleId: string, body: string}>) {
@@ -66,6 +84,9 @@ const articleDetails = createSlice({
 });
 
 export const {
+    loadArticleRequest,
+    loadArticleSuccess,
+    loadArticleFailed,
     updateTitleRequest,
     updateTitleSuccess,
     updateTitleFailed,
