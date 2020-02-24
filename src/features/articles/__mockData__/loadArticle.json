@@ -1,0 +1,9 @@
+{
+    "createdTimestamp": "2020-02-16T00:00:00.000Z",
+    "ownerUserId": "user1",
+    "articleId": "article1",
+    "title": "loaded article title",
+    "precis": "introduction",
+    "body": "<p>test article</p>",
+    "published": false
+}
