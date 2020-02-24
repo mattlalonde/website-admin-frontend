@@ -37,7 +37,7 @@ const articleDetails = createSlice({
             state.isLoading = false;
             state.loadedArticle = action.payload;
         },
-        loadArticleFailed(state, action: PayloadAction<{error: string}>) {
+        loadArticleFailed(state, action: PayloadAction<{error: Error | string}>) {
             state.isLoading = false;
             state.loadedArticle = null;
             state.error = action.payload.error;
@@ -57,7 +57,7 @@ const articleDetails = createSlice({
             }
             state.isSaving = false;
         },
-        updateTitleFailed(state, action: PayloadAction<{error: string}>) {
+        updateTitleFailed(state, action: PayloadAction<{error: Error | string}>) {
             state.isSaving = false;
             state.error = action.payload.error;
         },
@@ -76,7 +76,7 @@ const articleDetails = createSlice({
             }
             state.isSaving = false;
         },
-        updateBodyFailed(state, action: PayloadAction<{error: string}>) {
+        updateBodyFailed(state, action: PayloadAction<{error: Error | string}>) {
             state.isSaving = false;
             state.error = action.payload.error;
         }   

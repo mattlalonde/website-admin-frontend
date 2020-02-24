@@ -1,50 +1,50 @@
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { watchLoadArticlesSaga } from './sagas';
-import reducer, * as actions from './articleListSlice';
-import { loadArticles } from '../api';
-import articleList from '../__mockData__/list.json';
+import { watchLoadArticleSaga } from './sagas';
+import reducer, * as actions from './articleDetailsSlice';
+import { loadArticle } from '../api';
+import loadedArticle from '../__mockData__/loadArticle.json';
 import { throwError } from 'redux-saga-test-plan/providers';
 
-
-describe('load article list saga', () => {
+describe('load article saga', () => {
 
     it('puts failed action on error and updates store', () => {
         const error = new Error('test error');
 
-        return expectSaga(watchLoadArticlesSaga)
+        return expectSaga(watchLoadArticleSaga)
                 .withReducer(reducer)
                 .provide([
-                    [matchers.call.fn(loadArticles), throwError(error)]
+                    [matchers.call.fn(loadArticle), throwError(error)]
                 ])
-                .put(actions.loadArticlesFailed({ error }))
-                .dispatch(actions.loadArticlesRequest())
+                .put(actions.loadArticleFailed({error}))
+                .dispatch(actions.loadArticleRequest('test'))
                 .silentRun()
                 .then(result => {
                     expect(result.storeState).toEqual({
-                        articles: [],
+                        loadedArticle: null,
                         isLoading: false,
+                        isSaving: false,
                         error: error
                     });
                 });
     });
 
     it('calls the api and updates the store', () => {
-        return expectSaga(watchLoadArticlesSaga)
+        return expectSaga(watchLoadArticleSaga)
                 .withReducer(reducer)
                 .provide([
-                    [matchers.call.fn(loadArticles), articleList]
+                    [matchers.call.fn(loadArticle), loadedArticle]
                 ])
-                .put(actions.loadArticlesSuccess(articleList))
-                .dispatch(actions.loadArticlesRequest())
+                .put(actions.loadArticleSuccess(loadedArticle))
+                .dispatch(actions.loadArticleRequest('test'))
                 .silentRun()
                 .then(result => {
                     expect(result.storeState).toEqual({
-                        articles: articleList,
+                        loadedArticle: loadedArticle,
                         isLoading: false,
+                        isSaving: false,
                         error: null
                     });
                 });
     });
-
-});
+})

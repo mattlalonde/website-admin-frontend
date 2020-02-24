@@ -1,4 +1,4 @@
-import { takeEvery, call, put, all, fork } from 'redux-saga/effects';
+import { takeLatest, call, put, all, fork } from 'redux-saga/effects';
 
 import * as actions from './articleDetailsSlice';
 import { loadArticle } from '../api';
@@ -10,12 +10,12 @@ export function* loadArticleSaga(action) {
         yield put(actions.loadArticleSuccess(data));
     }
     catch(error) {
-        yield put(actions.loadArticleFailed(error));
+        yield put(actions.loadArticleFailed({error}));
     }
 }
 
-function* watchLoadArticleSaga() {
-    yield takeEvery(actions.loadArticleRequest, loadArticleSaga);
+export function* watchLoadArticleSaga() {
+    yield takeLatest(actions.loadArticleRequest, loadArticleSaga);
 }
 
 function* articleDetailsSaga() {

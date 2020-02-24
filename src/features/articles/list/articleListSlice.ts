@@ -34,10 +34,10 @@ const articleList = createSlice({
             state.isLoading = false;
             state.error = null;
         },
-        loadArticlesFailed(state, action: PayloadAction<Error | string>) {
+        loadArticlesFailed(state, action: PayloadAction<{ error: Error | string }>) {
             state.articles = [];
             state.isLoading = false;
-            state.error = action.payload;
+            state.error = action.payload.error;
         }
     }
 });

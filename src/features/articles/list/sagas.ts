@@ -10,11 +10,11 @@ export function* loadArticlesSaga() {
         yield put(actions.loadArticlesSuccess(data));
     }
     catch(error) {
-        yield put(actions.loadArticlesFailed(error));
+        yield put(actions.loadArticlesFailed({error}));
     }
 }
 
-function* watchLoadArticlesSaga() {
+export function* watchLoadArticlesSaga() {
     yield takeEvery(actions.loadArticlesRequest, loadArticlesSaga);
 }
 
