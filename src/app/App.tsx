@@ -1,13 +1,19 @@
 import React, { FunctionComponent } from 'react';
-import { Store } from 'redux'
-import { History } from 'history'
+import { Store } from 'redux';
+import { History } from 'history';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+
 
 import { RootState } from './store';
 import Routes from './routes';
 
 import './App.css';
+import { Container } from '@material-ui/core';
+import { NavBar } from '../components/NavBar/NavBar';
+import { theme } from './theme';
 
 
 
@@ -22,7 +28,13 @@ const App : FunctionComponent<IAppProps> = ({store, history}) => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <Routes />
+        <CssBaseline />
+        <ThemeProvider theme={theme}>
+          <NavBar />
+          <Container maxWidth="lg">
+            <Routes />
+          </Container>
+        </ThemeProvider>
       </ConnectedRouter>
     </Provider>
   );

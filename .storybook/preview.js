@@ -1,7 +1,25 @@
 import React from 'react';
 import { addDecorator } from '@storybook/react';
-import BootstrapProvider from '@bootstrap-styled/provider/lib/BootstrapProvider';
-import { Container } from '@bootstrap-styled/v4';
-import { GlobalStyle } from '../src/styles';
+import { Container } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { theme } from '../src/app/theme';
+import 'typeface-roboto';
 
-addDecorator(storyFn => <BootstrapProvider><GlobalStyle /><Container className="py-2">{storyFn()}</Container></BootstrapProvider>);
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import createRootReducer from '../src/app/rootReducer';
+
+const rootReducer = createRootReducer();
+const store = createStore(rootReducer);
+
+addDecorator(storyFn => (
+            <Provider store={store}>
+                <CssBaseline />
+                <ThemeProvider theme={theme}>
+                    <Container my={2}>
+                        {storyFn()}
+                    </Container>
+                </ThemeProvider>
+            </Provider>
+        ));

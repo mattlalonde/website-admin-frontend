@@ -3,7 +3,7 @@
     "ownerUserId": "user1",
     "articleId": "article1",
     "title": "loaded article title",
-    "precis": "introduction",
-    "body": "<p>test article</p>",
+    "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus.",
+    "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus. Donec blandit, odio nec ultrices sollicitudin, sapien risus aliquet magna, quis gravida ligula orci vel est. Fusce dapibus rutrum nunc et sodales. Aenean finibus justo eros, et consequat risus condimentum vitae. Cras consequat interdum ligula ac rutrum. Suspendisse feugiat fringilla sollicitudin. Quisque eu condimentum justo. Nullam facilisis viverra posuere. Fusce nulla augue, blandit in ultrices nec, hendrerit vitae mauris.</p>",
     "published": false
 }
