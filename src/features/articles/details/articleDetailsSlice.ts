@@ -1,27 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface IArticle {
-    ownerUserId: string;
-    articleId: string;
-    createdTimestamp: string;
-    title: string;
-    precis?: string;
-    body?: string;
-    published: boolean;
-}
+import { IArticle, IUpdateArticleContentRequest } from '../models';
 
 interface IArticleDetailsState {
     loadedArticle: IArticle | null;
     isLoading: boolean;
     isSaving: boolean;
-    error: Error | string | null;
+    serverError: Error | string | null;
 }
 
 const initialState: IArticleDetailsState = {
     loadedArticle: null,
     isLoading: false,
     isSaving: false,
-    error: null
+    serverError: null
 };
 
 const articleDetails = createSlice({
@@ -31,7 +22,7 @@ const articleDetails = createSlice({
         loadArticleRequest(state, action: PayloadAction<string>) {
             state.isLoading = true;
             state.isSaving = false;
-            state.error = null;
+            state.serverError = null;
         },
         loadArticleSuccess(state, action: PayloadAction<IArticle>) {
             state.isLoading = false;
@@ -40,46 +31,32 @@ const articleDetails = createSlice({
         loadArticleFailed(state, action: PayloadAction<{error: Error | string}>) {
             state.isLoading = false;
             state.loadedArticle = null;
-            state.error = action.payload.error;
+            state.serverError = action.payload.error;
         },
-        updateTitleRequest(state) {
+        updateArticleContentRequest(state, action: PayloadAction<IUpdateArticleContentRequest>) {
             state.isLoading = false;
             state.isSaving = true;
-            state.error = null;
+            state.serverError = null;
         },
-        updateTitleSuccess(state, action: PayloadAction<{articleId: string, title: string}>) {
+        updateArticleContentSuccess(state, action: PayloadAction<IArticle>) {
             if(state.loadedArticle && state.loadedArticle.articleId === action.payload.articleId) {
-                state.loadedArticle.title = action.payload.title;
-                state.error = null;
+                state.loadedArticle = action.payload;
             }
             else {
-                state.error = 'Error: Unable to update article';
+                state.serverError = 'Error: loaded article mismatch, please reload article';
             }
             state.isSaving = false;
         },
-        updateTitleFailed(state, action: PayloadAction<{error: Error | string}>) {
+        updateArticleContentFailed(state, action: PayloadAction<{error: Error | string }>) {
             state.isSaving = false;
-            state.error = action.payload.error;
+            state.serverError = action.payload.error;
         },
-        updateBodyRequest(state) {
-            state.isSaving = true;
+        unloadLoadedArticle(state) {
+            state.isSaving = false;
             state.isLoading = false;
-            state.error = null;
-        },
-        updateBodySuccess(state, action: PayloadAction<{articleId: string, body: string}>) {
-            if(state.loadedArticle && state.loadedArticle.articleId === action.payload.articleId) {
-                state.loadedArticle.body = action.payload.body;
-                state.error = null;
-            }
-            else {
-                state.error = 'Error: Unable to update article';
-            }
-            state.isSaving = false;
-        },
-        updateBodyFailed(state, action: PayloadAction<{error: Error | string}>) {
-            state.isSaving = false;
-            state.error = action.payload.error;
-        }   
+            state.loadedArticle = null;
+            state.serverError = null;
+        }
     }
 });
 
@@ -87,12 +64,10 @@ export const {
     loadArticleRequest,
     loadArticleSuccess,
     loadArticleFailed,
-    updateTitleRequest,
-    updateTitleSuccess,
-    updateTitleFailed,
-    updateBodyRequest,
-    updateBodySuccess,
-    updateBodyFailed
+    updateArticleContentRequest,
+    updateArticleContentSuccess,
+    updateArticleContentFailed,
+    unloadLoadedArticle
 } = articleDetails.actions;
 
 export default articleDetails.reducer;

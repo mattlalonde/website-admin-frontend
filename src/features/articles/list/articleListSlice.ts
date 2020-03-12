@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface IArticleListItem {
-    ownerUserId: string;
-    articleId: string;
-    createdTimestamp: string;
-    title: string;
-    precis?: string;
-    published: boolean;
-}
+import { IArticleListItem } from '../models';
 
 interface IArticleListState {
     articles: Array<IArticleListItem>;

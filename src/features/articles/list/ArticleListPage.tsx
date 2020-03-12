@@ -1,24 +1,9 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadArticlesRequest, IArticleListItem } from './articleListSlice';
+import { loadArticlesRequest } from './articleListSlice';
 import { RootState } from '../../../app/store';
-
-interface IArticleListProps {
-    articles: Array<IArticleListItem>;
-}
-
-const ArticleList = ({articles}: IArticleListProps) => {
-    const renderedItems = articles && articles.length > 0 ? articles.map(article => (
-        <div key={article.articleId}> 
-            <h1>{article.title}</h1>
-        </div>
-        
-    )) : <div>empty list</div>;
-    return <>
-                {renderedItems}
-            </>
-}
+import { ArticleList } from './ArticleList';
 
 export const ArticleListPage: FunctionComponent = () => {
 
@@ -28,18 +13,17 @@ export const ArticleListPage: FunctionComponent = () => {
     );
 
     useEffect(() => {
-        dispatch(loadArticlesRequest());
-    }, [dispatch]);
+        if(!articles.length) {
+            dispatch(loadArticlesRequest());
+        }
+    }, [dispatch, articles]);
 
-    if(isLoading) {
-        return (<div>loading...</div>)
-    }
-    else if(error) {
+    if(error) {
         return (<div>error: {error}</div>)
     }
 
     return (
-        <ArticleList articles={articles} />
+        <ArticleList articles={articles} isLoading={isLoading} />
     )
 }
 
