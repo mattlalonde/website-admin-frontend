@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { RootState } from '../../../app/store';
-import { loadArticleRequest, unloadLoadedArticle } from './articleDetailsSlice';
+import { loadArticleRequest } from './articleDetailsSlice';
 import { ArticleDetailsForm } from './ArticleDetailsForm';
 import { Tabs, Tab, LinearProgress } from '@material-ui/core';
 import { TabPanel } from '../../../components/TabPanel/TabPanel';
@@ -31,13 +31,15 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
     );
 
     useEffect(() => {
-        dispatch(loadArticleRequest(id));
+        if(loadedArticle?.articleId !== id) {
+            dispatch(loadArticleRequest(id));
+        }
 
-        // cleanup loaded article
-        return () => {
-            dispatch(unloadLoadedArticle());
-        };
-    }, [dispatch, id]);
+        // cleanup loaded article ?
+        /* return () => {
+            
+        }; */
+    }, [dispatch, id, loadedArticle]);
 
     if (serverError) {
         return (<div>error</div>)
@@ -46,7 +48,7 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
         return (
             <>
                 {isLoading ? <LinearProgress color='secondary' /> : null}
-                <h2>{loadedArticle?.title}</h2>
+                {isLoading ? null : <h2>{loadedArticle?.title}</h2>}
                 <Tabs
                     value={selectedTab}
                     onChange={(event: ChangeEvent<{}>, newValue: ArticleTabView) => setSelectedTab(newValue)}

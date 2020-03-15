@@ -24,3 +24,7 @@ export interface IUpdateArticleContentRequest {
     precis?: string | null,
     body?: string | null
 }
+
+export interface ICreateArticleRequest {
+    title: string;
+}

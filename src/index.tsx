@@ -1,16 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserHistory } from 'history'
 import 'typeface-roboto';
 
 import './index.css';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 
-import store from './app/store';
-
-
-const history = createBrowserHistory();
+import store, { history } from './app/store';
 
 const render = () => {
     ReactDOM.render(
