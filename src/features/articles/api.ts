@@ -17,9 +17,11 @@ export const createArticle = (articleId: string): Promise<IArticle> => {
 
 export const loadArticle = (articleId: string): Promise<IArticle> => {
     return new Promise((resolve, reject) => {
+
+        const article = {...loadedArticle, ...{ articleId: articleId }};
         
         setTimeout(() => {
-            resolve(loadedArticle);
+            resolve(article);
         }, 1000);
         
     });

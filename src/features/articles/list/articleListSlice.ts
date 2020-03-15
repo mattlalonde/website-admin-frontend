@@ -30,6 +30,9 @@ const articleList = createSlice({
             state.articles = [];
             state.isLoading = false;
             state.error = action.payload.error;
+        },
+        addArticleToList(state, action: PayloadAction<IArticleListItem>) {
+            state.articles.unshift(action.payload);
         }
     }
 });
@@ -37,7 +40,8 @@ const articleList = createSlice({
 export const {
     loadArticlesRequest,
     loadArticlesSuccess,
-    loadArticlesFailed
+    loadArticlesFailed,
+    addArticleToList
 } = articleList.actions;
 
 export default articleList.reducer;

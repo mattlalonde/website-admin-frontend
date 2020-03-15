@@ -47,6 +47,7 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
                     label="ID" 
                     fullWidth={true} 
                     defaultValue={articleContent?.articleId} 
+                    variant='outlined'
                     InputProps={{readOnly: true}}>
                 </TextField>
             </Box>

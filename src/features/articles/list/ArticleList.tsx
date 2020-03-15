@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 
 import { IArticleListItem } from '../models';
-import { Paper, LinearProgress } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import { ArticleListItemLoading } from './ArticleListItemLoading';
 
@@ -50,7 +50,6 @@ export const ArticleList: FunctionComponent<IArticleListProps> = ({ articles, is
     if(isLoading) {
         return (
             <>
-                <LinearProgress color='secondary' />
                 <ArticleListItemLoading />
                 <ArticleListItemLoading />
                 <ArticleListItemLoading />

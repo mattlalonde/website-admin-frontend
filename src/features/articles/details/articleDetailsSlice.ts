@@ -56,6 +56,12 @@ const articleDetails = createSlice({
             state.isLoading = false;
             state.loadedArticle = null;
             state.serverError = null;
+        },
+        setLoadedArticle(state, action: PayloadAction<IArticle>) {
+            state.isSaving = false;
+            state.isLoading = false;
+            state.loadedArticle = action.payload;
+            state.serverError = null;
         }
     }
 });
@@ -67,7 +73,8 @@ export const {
     updateArticleContentRequest,
     updateArticleContentSuccess,
     updateArticleContentFailed,
-    unloadLoadedArticle
+    unloadLoadedArticle,
+    setLoadedArticle
 } = articleDetails.actions;
 
 export default articleDetails.reducer;
