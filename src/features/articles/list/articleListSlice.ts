@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticleListItem } from '../models';
 
-interface IArticleListState {
+export interface IArticleListState {
     articles: Array<IArticleListItem>;
     isLoading: boolean;
     error: Error | string | null;

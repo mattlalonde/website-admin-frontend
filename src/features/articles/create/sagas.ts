@@ -12,18 +12,17 @@ export function* createArticleSaga(action) {
         yield put(articleCreateActions.createArticleSuccess(data));
         yield put(articleDetailsActions.setLoadedArticle(data));
         yield put(articleCreateActions.setCreateArticlePopupVisibility(false));
-        yield(put(articleListActions.addArticleToList({
+        yield put(articleListActions.addArticleToList({
             articleId: data.articleId,
             ownerUserId: data.ownerUserId,
             createdTimestamp:data.createdTimestamp,
             published: data.published,
-            title: data.title,
-            precis: data.precis
-        })));
+            title: data.title
+        }));
         yield put(push(`/article-details/${data.articleId}`));
     }
     catch(error) {
-        yield put(articleCreateActions.createArticleFailed(error));
+        yield put(articleCreateActions.createArticleFailed({error}));
     }
 }
 

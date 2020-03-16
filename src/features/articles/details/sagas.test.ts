@@ -24,7 +24,7 @@ describe('load article saga', () => {
                         loadedArticle: null,
                         isLoading: false,
                         isSaving: false,
-                        error: error
+                        serverError: error
                     });
                 });
     });
@@ -43,7 +43,7 @@ describe('load article saga', () => {
                         loadedArticle: loadedArticle,
                         isLoading: false,
                         isSaving: false,
-                        error: null
+                        serverError: null
                     });
                 });
     });

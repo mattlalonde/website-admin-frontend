@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ICreateArticleRequest, IArticle } from '../models';
 
-interface IArticleCreateState {
+export interface IArticleCreateState {
     isPopupOpen: boolean;
     isCreating: boolean;
     createArticleServerError: Error | string | null;

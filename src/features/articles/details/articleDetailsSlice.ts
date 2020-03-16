@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticle, IUpdateArticleContentRequest } from '../models';
 
-interface IArticleDetailsState {
+export interface IArticleDetailsState {
     loadedArticle: IArticle | null;
     isLoading: boolean;
     isSaving: boolean;
