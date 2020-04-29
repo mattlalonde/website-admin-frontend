@@ -4,6 +4,8 @@ import { Container } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from '../src/app/theme';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import 'typeface-roboto';
 
 import { createStore } from 'redux';
@@ -17,9 +19,11 @@ addDecorator(storyFn => (
             <Provider store={store}>
                 <CssBaseline />
                 <ThemeProvider theme={theme}>
-                    <Container my={2}>
-                        {storyFn()}
-                    </Container>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Container my={2}>
+                            {storyFn()}
+                        </Container>
+                    </MuiPickersUtilsProvider>
                 </ThemeProvider>
             </Provider>
         ));

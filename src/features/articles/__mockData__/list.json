@@ -2,25 +2,25 @@
     {
         "createdTimestamp": "2020-02-16T00:00:00.000Z",
         "ownerUserId": "user1",
-        "articleId": "article1",
+        "id": "article1",
         "title": "title 1",
         "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus. Donec blandit, odio nec ultrices sollicitudin, sapien risus aliquet magna, quis gravida ligula orci vel est. Fusce dapibus rutrum nunc et sodales. Aenean finibus justo eros, et consequat risus condimentum vitae. Cras consequat interdum ligula ac rutrum. Suspendisse feugiat fringilla sollicitudin. Quisque eu condimentum justo. Nullam facilisis viverra posuere. Fusce nulla augue, blandit in ultrices nec, hendrerit vitae mauris.",
-        "published": false
+        "state": "DRAFT"
     },
     {
         "createdTimestamp": "2020-02-16T00:00:00.000Z",
         "ownerUserId": "user1",
-        "articleId": "article2",
+        "id": "article2",
         "title": "title 2",
         "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus.",
-        "published": false
+        "state": "DRAFT"
     },
     {
         "createdTimestamp": "2020-02-16T00:00:00.000Z",
         "ownerUserId": "user1",
-        "articleId": "article3",
+        "id": "article3",
         "title": "title 3",
         "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus.",
-        "published": false
+        "state": "DRAFT"
     }
 ]

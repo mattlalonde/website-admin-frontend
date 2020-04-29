@@ -16,6 +16,8 @@ import initialStoreState from '../../../app/initialStoreStateTesting';
 
 import createdArticle from '../__mockData__/createdArticle.json';
 import articleList from '../__mockData__/list.json';
+import { IArticleListItem, IArticle } from '../models';
+import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 
 describe('create article saga', () => {
 
@@ -45,32 +47,39 @@ describe('create article saga', () => {
     it('creates article and updates store', () => {
 
 
-        const newListArticle = {
-            articleId: createdArticle.articleId,
+        const newListArticle : IArticleListItem = {
+            id: createdArticle.id,
             ownerUserId: createdArticle.ownerUserId,
             createdTimestamp:createdArticle.createdTimestamp,
-            published: createdArticle.published,
+            state: createdArticle.state,
             title: createdArticle.title
-        };
+        } as IArticleListItem;
 
-        initialStoreState.articleList = {...initialStoreState.articleList, ...{ articles: articleList }};
+        initialStoreState.articleList = {...initialStoreState.articleList, ...{ articles: articleList as Array<IArticleListItem> }};
         
         return expectSaga(watchCreateArticleSaga)
                 .withReducer(createRootReducer(), initialStoreState)
                 .provide([
                     [matchers.call.fn(createArticle), createdArticle]
                 ])
-                .put(createArticleActions.createArticleSuccess(createdArticle))
-                .put(articleDetailsActions.setLoadedArticle(createdArticle))
+                .put(createArticleActions.createArticleSuccess(createdArticle as IArticle))
+                .put(articleDetailsActions.setLoadedArticle(createdArticle as IArticle))
                 .put(createArticleActions.setCreateArticlePopupVisibility(false))
                 .put(articleListActions.addArticleToList(newListArticle))
-                .put(push(`/article-details/${createdArticle.articleId}`))
+                .put(push(`/article-details/${createdArticle.id}`))
                 .dispatch(createArticleActions.createArticleRequest({ title: 'new article title'}))
                 .silentRun()
                 .then(result => {
                     const articleCreateState: IArticleCreateState = result.storeState.articleCreate;
                     const articleDetailsState: IArticleDetailsState = result.storeState.articleDetails;
                     const articleListState: IArticleListState = result.storeState.articleList;
+                    const createdArticleListItem: IArticleListItem = {
+                        id: createdArticle.id,
+                        createdTimestamp: createdArticle.createdTimestamp,
+                        ownerUserId: createdArticle.ownerUserId,
+                        state: createdArticle.state,
+                        title: createdArticle.title
+                    } as IArticleListItem;
 
                     expect(articleCreateState).toEqual({
                         isPopupOpen: false,
@@ -80,13 +89,11 @@ describe('create article saga', () => {
 
                     expect(articleDetailsState).toEqual({
                         loadedArticle: createdArticle,
-                        isLoading: false,
-                        isSaving: false,
-                        serverError: null
+                        processingState: ArticleDetailsProcessingState.None
                     });
 
                     expect(articleListState).toEqual({
-                        articles: [createdArticle, ...articleList],
+                        articles: [createdArticleListItem, ...articleList],
                         isLoading: false,
                         error: null
                     });

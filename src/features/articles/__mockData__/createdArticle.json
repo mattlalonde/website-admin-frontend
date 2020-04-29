@@ -1,7 +1,8 @@
 {
     "createdTimestamp": "2020-02-16T00:00:00.000Z",
     "ownerUserId": "user1",
-    "articleId": "created-article",
+    "id": "created-article",
     "title": "created article title ",
-    "published": false
+    "state": "DRAFT",
+    "publicationDate": null
 }

@@ -1,30 +1,23 @@
 
+export type ArticleStateType = 'DRAFT' | 'PUBLISHED' | 'DELETED';
+
+export interface IArticleListItem {
+    ownerUserId: string;
+    id: string;
+    createdTimestamp: string;
+    title: string;
+    precis?: string;
+    state: ArticleStateType;
+}
+
 export interface IArticle {
     ownerUserId: string;
-    articleId: string;
+    id: string;
     title: string;
     precis?: string;
     body?: string;
     createdTimestamp: string;
-    published: boolean;
+    state: ArticleStateType;
+    publicationDate?: string | null;
 }
 
-export interface IArticleListItem {
-    ownerUserId: string;
-    articleId: string;
-    createdTimestamp: string;
-    title: string;
-    precis?: string;
-    published: boolean;
-}
-
-export interface IUpdateArticleContentRequest {
-    articleId: string,
-    title: string,
-    precis?: string | null,
-    body?: string | null
-}
-
-export interface ICreateArticleRequest {
-    title: string;
-}

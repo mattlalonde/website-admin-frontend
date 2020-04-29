@@ -7,7 +7,8 @@ import { ArticleList } from './ArticleList';
 import { setCreateArticlePopupVisibility, createArticleRequest } from '../create/articleCreateSlice';
 import { Button, LinearProgress, Box } from '@material-ui/core';
 import { CreateArticleDialog } from '../create/CreateArticleDialog';
-import { ICreateArticleRequest } from '../models';
+import { Alert } from '@material-ui/lab';
+import { ICreateArticleRequest } from '../apiRequests';
 
 export const ArticleListPage: FunctionComponent = () => {
 
@@ -21,10 +22,8 @@ export const ArticleListPage: FunctionComponent = () => {
     );
 
     useEffect(() => {
-        if(!articles.length) {
-            dispatch(loadArticlesRequest());
-        }
-    }, [dispatch, articles]);
+        dispatch(loadArticlesRequest());
+    }, [dispatch]);
 
     const onCreateArticleClick = () => {
         dispatch(setCreateArticlePopupVisibility(true));
@@ -39,7 +38,15 @@ export const ArticleListPage: FunctionComponent = () => {
     }
 
     if(error) {
-        return (<div>error: {error}</div>)
+        return (
+            <Box my={2}>
+                <Alert severity='error'>
+                    { typeof error === 'string'
+                        ? error
+                        : error.message}
+                </Alert>
+            </Box>
+        )
     }
 
     return (

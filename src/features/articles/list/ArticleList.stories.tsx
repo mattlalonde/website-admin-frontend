@@ -3,6 +3,7 @@ import StoryRouter from 'storybook-react-router';
 
 import { ArticleList } from './ArticleList';
 import articleList from '../__mockData__/list.json';
+import { IArticleListItem } from '../models';
 
 export default {
     component: ArticleList,
@@ -11,7 +12,7 @@ export default {
 }
 
 export const Default = () => {
-    return <ArticleList articles={articleList} isLoading={false} />
+    return <ArticleList articles={articleList as Array<IArticleListItem>} isLoading={false} />
 }
 
 export const Loading = () => {

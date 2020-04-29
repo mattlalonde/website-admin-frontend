@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import { DialogContent, Dialog, DialogTitle, TextField, Button, CircularProgress, DialogActions, Box } from '@material-ui/core';
 
-import { ICreateArticleRequest } from '../models';
 import { useForm } from 'react-hook-form';
 import SaveIcon from '@material-ui/icons/Save';
 import { Alert } from '@material-ui/lab';
+import { ICreateArticleRequest } from '../apiRequests';
 
 interface ICreateArticlePopupProps {
     handleClose: () => void;

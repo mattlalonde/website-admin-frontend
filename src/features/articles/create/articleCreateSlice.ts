@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICreateArticleRequest, IArticle } from '../models';
+import { IArticle } from '../models';
+import { ICreateArticleRequest } from '../apiRequests';
 
 export interface IArticleCreateState {
     isPopupOpen: boolean;

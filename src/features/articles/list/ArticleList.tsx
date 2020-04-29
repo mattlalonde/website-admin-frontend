@@ -2,9 +2,10 @@ import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 
 import { IArticleListItem } from '../models';
-import { Paper } from '@material-ui/core';
+import { Paper, Box } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import { ArticleListItemLoading } from './ArticleListItemLoading';
+import { Alert } from '@material-ui/lab';
 
 const ArticleListItemContainer = styled(Paper)({
     padding: '1em',
@@ -36,8 +37,8 @@ interface IArticleListItemProps {
 export const ArticleListItem: FunctionComponent<IArticleListItemProps> = ({ article }) => {
 
     return (
-        <NoUnderlineLink to={`/article-details/${article.articleId}`}>
-            <ArticleListItemContainer key={article.articleId}> 
+        <NoUnderlineLink to={`/article-details/${article.id}`}>
+            <ArticleListItemContainer key={article.id}> 
                 <h1>{article.title}</h1>
                 <div>{article.precis || 'no precis'}</div>
             </ArticleListItemContainer>
@@ -56,9 +57,18 @@ export const ArticleList: FunctionComponent<IArticleListProps> = ({ articles, is
             </>
         )
     }
+    else if(articles.length === 0) {
+        return (
+            <Box my={2}>
+                <Alert severity='info'>
+                    There are no articles
+                </Alert>
+            </Box>
+        )
+    }
     else {
         return <>
-            {articles.map(article => <ArticleListItem article={article} key={article.articleId} />)}
+            {articles.map(article => <ArticleListItem article={article} key={article.id} />)}
         </>
     }
 }

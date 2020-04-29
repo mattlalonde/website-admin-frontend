@@ -13,13 +13,13 @@ export function* createArticleSaga(action) {
         yield put(articleDetailsActions.setLoadedArticle(data));
         yield put(articleCreateActions.setCreateArticlePopupVisibility(false));
         yield put(articleListActions.addArticleToList({
-            articleId: data.articleId,
+            id: data.id,
             ownerUserId: data.ownerUserId,
             createdTimestamp:data.createdTimestamp,
-            published: data.published,
+            state: data.state,
             title: data.title
         }));
-        yield put(push(`/article-details/${data.articleId}`));
+        yield put(push(`/article-details/${data.id}`));
     }
     catch(error) {
         yield put(articleCreateActions.createArticleFailed({error}));

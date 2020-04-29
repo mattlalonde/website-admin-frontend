@@ -5,49 +5,78 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import { Box, TextField, Button, CircularProgress } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ReplayIcon from '@material-ui/icons/Replay';
 import { useDispatch } from 'react-redux';
-import { updateArticleContentRequest } from './articleDetailsSlice';
-import { IUpdateArticleContentRequest } from '../models';
+import { updateArticleContentRequest, deleteArticleRequest, reinstateArticleRequest } from './articleDetailsSlice';
 import { ArticleDetailsLoading } from './ArticleDetailsLoading';
+import { IArticle } from '../models';
+import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 
-
-
-interface IArticleDetailsFormProps {
-    articleContent: IUpdateArticleContentRequest | null,
-    isSaving: boolean,
-    isLoading: boolean
+interface IArticleDetailsFormValues {
+    id: string,
+    title: string,
+    precis: string,
+    body: string
 }
 
-export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = ({articleContent, isSaving, isLoading}) => {
+interface IArticleDetailsFormProps {
+    article: IArticle | null,
+    processingState: ArticleDetailsProcessingState
+}
+
+export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = ({article, processingState}) => {
 
     const dispatch = useDispatch();
-    const { register, setValue, handleSubmit, errors } = useForm<IUpdateArticleContentRequest>();
+    const { register, unregister, setValue, handleSubmit, errors } = useForm<IArticleDetailsFormValues>();
+    const isProcessing = processingState !== ArticleDetailsProcessingState.None;
 
     useEffect(() => {
         register({ name: "body"});
-    }, [register])
+        return () => unregister("body");
+    }, [register, unregister])
 
-    const onSubmit = handleSubmit(content => {
-        dispatch(updateArticleContentRequest(content));
+    const onUpdate = handleSubmit(content => {
+        dispatch(updateArticleContentRequest({
+            id: content.id,
+            data: {
+                title: content.title,
+                precis: content.precis,
+                body: content.body
+            }
+        }));
     });
 
-    if(!articleContent || isLoading)
+    const onDelete = () => {
+        if(article) {
+            dispatch(deleteArticleRequest({ id: article.id }));
+        }
+    }
+
+    const onReinstate = () => {
+        if(article) {
+            dispatch(reinstateArticleRequest({ id: article.id }));
+        }
+    }
+
+    if(!article || processingState === ArticleDetailsProcessingState.Loading)
     {
         return <ArticleDetailsLoading />
     }
 
     return (
-        <form noValidate autoComplete="off" onSubmit={onSubmit}>
+        <form noValidate autoComplete="off" onSubmit={onUpdate}>
             <Box my={2}>
                 <TextField 
                     inputRef={register({ required: true })}
-                    error={!!errors.articleId}
-                    id="articleId" 
-                    name="articleId" 
+                    error={!!errors.id}
+                    id="id" 
+                    name="id" 
                     label="ID" 
                     fullWidth={true} 
-                    defaultValue={articleContent?.articleId} 
+                    defaultValue={article?.id} 
                     variant='outlined'
+                    disabled={isProcessing || article.state !== 'DRAFT'}
                     InputProps={{readOnly: true}}>
                 </TextField>
             </Box>
@@ -59,8 +88,9 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
                     name="title" 
                     label="Title" 
                     fullWidth={true} 
-                    defaultValue={articleContent?.title} 
+                    defaultValue={article?.title} 
                     variant='outlined'
+                    disabled={isProcessing || article.state !== 'DRAFT'}
                     helperText={!!errors.title ? "Title is required" : ''}>
                 </TextField>
             </Box>
@@ -73,7 +103,8 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
                     fullWidth={true} 
                     multiline={true} 
                     rows={4} 
-                    defaultValue={articleContent?.precis} 
+                    defaultValue={article?.precis} 
+                    disabled={isProcessing || article.state !== 'DRAFT'}
                     variant='outlined'>
                 </TextField>
             </Box>
@@ -83,26 +114,50 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
                     id="article-body-editor"
                     name="body"
                     editor={ ClassicEditor }
-                    data={articleContent?.body}
+                    data={article?.body}
+                    disabled={isProcessing || article.state !== 'DRAFT'}
                     onInit={(editor: any) => {
                         setValue("body", editor.getData());
                     }}
                     onChange={ ( event: any, editor: any ) => {
-                        const data = editor.getData();
-                        setValue("body", data);
-                        console.log( { event, editor, data } );
+                        setValue("body", editor.getData());
                     } }
                 />
             </Box>
             <Box my={2}>
-                <Button 
-                    type='submit'
-                    variant='contained' 
-                    color='primary' 
-                    startIcon={isSaving ? <CircularProgress size={20} /> : <SaveIcon />} 
-                    disabled={isSaving}>
-                            Save
-                </Button>
+                {article?.state === 'DRAFT' && (
+                    <>
+                        <Button 
+                            type='submit'
+                            variant='contained' 
+                            color='primary' 
+                            startIcon={processingState === ArticleDetailsProcessingState.Updating ? <CircularProgress size={20} /> : <SaveIcon />} 
+                            disabled={isProcessing}>
+                                    Save
+                        </Button>
+                        <Button 
+                            type='button'
+                            variant='contained' 
+                            color='secondary' 
+                            startIcon={processingState === ArticleDetailsProcessingState.Deleting ? <CircularProgress size={20} /> : <DeleteIcon />} 
+                            disabled={isProcessing}
+                            onClick={onDelete}>
+                                    Delete
+                        </Button>
+                    </>
+                )}
+                
+                {article?.state === 'DELETED' && (
+                    <Button 
+                        type='button'
+                        variant='contained' 
+                        color='secondary' 
+                        startIcon={processingState === ArticleDetailsProcessingState.Reinstating ? <CircularProgress size={20} /> : <ReplayIcon />} 
+                        disabled={isProcessing}
+                        onClick={onReinstate}>
+                                Reinstate
+                    </Button>
+                )}
             </Box>
         </form>
     )
