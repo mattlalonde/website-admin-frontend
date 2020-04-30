@@ -31,4 +31,14 @@ export class ApiError extends Error {
 
       Object.setPrototypeOf(this, new.target.prototype);
     }
+
+    static create(status, message) {
+      return new ApiError(message, {
+        apierror: {
+          status: status,
+          message: message,
+          timestamp: (new Date()).toDateString()
+        }
+      });
+    }
   }
