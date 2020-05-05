@@ -31,10 +31,10 @@ export function* watchCreateArticleSaga() {
 }
 
 
-function* articleDetailsSaga() {
+function* createArticleSagaRoot() {
     yield all([
         fork(watchCreateArticleSaga)
     ]);
 }
 
-export default articleDetailsSaga;
+export default createArticleSagaRoot;

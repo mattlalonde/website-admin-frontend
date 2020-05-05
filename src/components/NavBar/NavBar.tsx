@@ -47,6 +47,11 @@ export const NavBar: FunctionComponent = () => {
                             Articles
                         </Typography>
                     </NavLink>
+                    <NavLink to="/tags" className={classes.link} activeClassName={classes.activeLink}>
+                        <Typography variant="h6" className={classes.title}>
+                            Tags
+                        </Typography>
+                    </NavLink>
                 </Toolbar>
             </AppBar>
         </div>

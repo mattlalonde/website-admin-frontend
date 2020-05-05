@@ -25,7 +25,7 @@ export const updateTag = async (request: IUpdateTagRequest) => {
     throw ApiError.create('API_ERROR', 'Unable to update tag');
 }
 
-export const getTag = async (tagId: string) => {
+export const loadTag = async (tagId: string) => {
     const response = await http.get<ITag>(`${root}/tag/${tagId}`);
 
     if(response.parsedBody) {
@@ -35,7 +35,7 @@ export const getTag = async (tagId: string) => {
     throw ApiError.create('API_ERROR', 'Unable to find tag');
 }
 
-export const getTags = async () => {
+export const loadTags = async () => {
     const response = await http.get<Array<ITag>>(`${root}/tag/all`);
 
     if(response.parsedBody) {

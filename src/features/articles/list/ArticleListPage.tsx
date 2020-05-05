@@ -51,7 +51,7 @@ export const ArticleListPage: FunctionComponent = () => {
 
     return (
         <>
-            {isLoading ? <LinearProgress color='secondary' /> : null}
+            {isLoading && <LinearProgress color='secondary' />}
             <Box my={2}>
                 <Button
                     variant='contained' 

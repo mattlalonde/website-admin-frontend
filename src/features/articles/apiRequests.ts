@@ -14,7 +14,7 @@ export interface IUpdateArticleContentRequest extends IBaseArticleRequest {
     }
 }
 
-export interface IPublichArticleRequest extends IBaseArticleRequest {
+export interface IPublishArticleRequest extends IBaseArticleRequest {
     data: {
         publicationDate: string;
     }

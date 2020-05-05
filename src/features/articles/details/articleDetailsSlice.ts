@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticle } from '../models';
-import { IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublichArticleRequest, ITakeArticleOfflineRequest } from '../apiRequests';
+import { IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest } from '../apiRequests';
 import { IApiErrorData } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 
@@ -60,7 +60,7 @@ const articleDetails = createSlice({
         reinstateArticleFailed(state, action: PayloadAction<IApiErrorData>) {
             state.processingState = ArticleDetailsProcessingState.None;
         },
-        publishArticleRequest(state, action: PayloadAction<IPublichArticleRequest>) {
+        publishArticleRequest(state, action: PayloadAction<IPublishArticleRequest>) {
             state.processingState = ArticleDetailsProcessingState.Publishing;
         },
         publishArticleSuccess(state, action: PayloadAction<IArticle>) {

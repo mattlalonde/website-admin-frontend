@@ -1,6 +1,6 @@
 import { IArticle, IArticleListItem } from './models';
 import * as http from '../../utils/http';
-import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublichArticleRequest, ITakeArticleOfflineRequest } from './apiRequests';
+import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest } from './apiRequests';
 import { ApiError } from '../../errors/ApiError';
 
 const root = "/api";
@@ -70,7 +70,7 @@ export const reinstateArticle = async(request: IReinstateArticleRequest) => {
     throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
 }
 
-export const publishArticle = async (request: IPublichArticleRequest) => {
+export const publishArticle = async (request: IPublishArticleRequest) => {
     const response = await http.put<IArticle>(`${root}/article/${request.id}/publish`, request.data);
 
     if(response.parsedBody) {

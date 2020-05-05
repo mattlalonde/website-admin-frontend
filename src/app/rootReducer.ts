@@ -8,6 +8,10 @@ import articleDetailsReducer from '../features/articles/details/articleDetailsSl
 import articleListReducer from '../features/articles/list/articleListSlice';
 import articleCreateReducer from '../features/articles/create/articleCreateSlice';
 
+import tagDetailsReducer from '../features/tags/details/tagDetailsSlice';
+import tagListReducer from '../features/tags/list/tagListSlice';
+import tagCreateReducer from '../features/tags/create/tagCreateSlice';
+
 
 const createRootReducer = (history?: History) => {
 
@@ -15,7 +19,10 @@ const createRootReducer = (history?: History) => {
         errors: errorReducer,
         articleDetails: articleDetailsReducer,
         articleList: articleListReducer,
-        articleCreate: articleCreateReducer
+        articleCreate: articleCreateReducer,
+        tagDetails: tagDetailsReducer,
+        tagList: tagListReducer,
+        tagCreate: tagCreateReducer
     };
 
     if(history) {
