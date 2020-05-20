@@ -1,6 +1,6 @@
 import { ITag } from './models';
 import * as http from '../../utils/http';
-import { ICreateTagRequest, IUpdateTagRequest } from './apiRequests';
+import { ICreateTagRequest, IUpdateTagRequest, ISearchTagsRequest } from './apiRequests';
 import { ApiError } from '../../errors/ApiError';
 
 const root = '/api';
@@ -43,4 +43,14 @@ export const loadTags = async () => {
     }
 
     throw ApiError.create('API_ERROR', 'Unable to find tags');
+}
+
+export const searchTags = async (request: ISearchTagsRequest) => {
+    const response = await http.post<Array<ITag>>(`${root}/tag/search`, request);
+
+    if(response.parsedBody) {
+        return response.parsedBody;
+    }
+
+    throw ApiError.create('API_ERROR', 'Error searching tags');
 }

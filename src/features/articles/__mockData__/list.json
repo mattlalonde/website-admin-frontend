@@ -1,26 +1,51 @@
-[
-    {
-        "createdTimestamp": "2020-02-16T00:00:00.000Z",
-        "ownerUserId": "user1",
-        "id": "article1",
-        "title": "title 1",
-        "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus. Donec blandit, odio nec ultrices sollicitudin, sapien risus aliquet magna, quis gravida ligula orci vel est. Fusce dapibus rutrum nunc et sodales. Aenean finibus justo eros, et consequat risus condimentum vitae. Cras consequat interdum ligula ac rutrum. Suspendisse feugiat fringilla sollicitudin. Quisque eu condimentum justo. Nullam facilisis viverra posuere. Fusce nulla augue, blandit in ultrices nec, hendrerit vitae mauris.",
-        "state": "DRAFT"
+{
+    "entities": {
+        "articles": {
+            "4bb9fcc6-91d6-43d2-9696-9c57bce51b9b": {
+                "id": "4bb9fcc6-91d6-43d2-9696-9c57bce51b9b",
+                "createdTimestamp": "2020-04-27T16:48:53.63",
+                "publicationDate": null,
+                "state": "DRAFT",
+                "title": "new title",
+                "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus.",
+                "tags": [
+                    "bc19aab9-deae-4541-a155-4b2833997ea2",
+                    "91fedcd5-d48f-4da7-8b38-49807502e563"
+                ]
+            },
+            "148f85bd-d8cc-4e62-adf9-567cbc61f9ee": {
+                "id": "148f85bd-d8cc-4e62-adf9-567cbc61f9ee",
+                "createdTimestamp": "2020-05-16T22:50:31.412",
+                "publicationDate": null,
+                "state": "DRAFT",
+                "title": "test article 3",
+                "precis": null,
+                "tags": []
+            },
+            "b162bcf8-0083-44f1-a29d-87d6195cc9f6": {
+                "id": "b162bcf8-0083-44f1-a29d-87d6195cc9f6",
+                "createdTimestamp": "2020-05-16T22:42:11.701",
+                "publicationDate": null,
+                "state": "DRAFT",
+                "title": "test article 2",
+                "precis": null,
+                "tags": []
+            }
+        },
+        "tags": {
+            "bc19aab9-deae-4541-a155-4b2833997ea2": {
+                "tagId": "bc19aab9-deae-4541-a155-4b2833997ea2",
+                "name": "reactjs"
+            },
+            "91fedcd5-d48f-4da7-8b38-49807502e563": {
+                "tagId": "91fedcd5-d48f-4da7-8b38-49807502e563",
+                "name": "d3"
+            }
+        }
     },
-    {
-        "createdTimestamp": "2020-02-16T00:00:00.000Z",
-        "ownerUserId": "user1",
-        "id": "article2",
-        "title": "title 2",
-        "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus.",
-        "state": "DRAFT"
-    },
-    {
-        "createdTimestamp": "2020-02-16T00:00:00.000Z",
-        "ownerUserId": "user1",
-        "id": "article3",
-        "title": "title 3",
-        "precis": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus.",
-        "state": "DRAFT"
-    }
-]
+    "result": [
+        "4bb9fcc6-91d6-43d2-9696-9c57bce51b9b",
+        "b162bcf8-0083-44f1-a29d-87d6195cc9f6",
+        "148f85bd-d8cc-4e62-adf9-567cbc61f9ee"
+    ]
+}

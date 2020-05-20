@@ -20,6 +20,18 @@ export interface IPublishArticleRequest extends IBaseArticleRequest {
     }
 }
 
+export interface IAddTagToArticleRequest extends IBaseArticleRequest {
+    data: {
+        tagId: string;
+    }
+}
+
+export interface IRemoveTagFromArticleRequest extends IBaseArticleRequest {
+    data: {
+        tagId: string;
+    }
+}
+
 export interface ITakeArticleOfflineRequest extends IBaseArticleRequest { }
 
 export interface IDeleteArticleRequest extends IBaseArticleRequest { }

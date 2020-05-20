@@ -1,6 +1,6 @@
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { watchLoadArticlesSaga } from './sagas';
+import { watchLoadArticlesSaga } from './loadArticlesSaga';
 import reducer, * as actions from './articleListSlice';
 import { loadArticles } from '../api';
 import articleList from '../__mockData__/list.json';

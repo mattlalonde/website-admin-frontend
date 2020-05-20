@@ -4,5 +4,7 @@
     "id": "created-article",
     "title": "created article title ",
     "state": "DRAFT",
-    "publicationDate": null
+    "publicationDate": null,
+    "body": null,
+    "tags": []
 }

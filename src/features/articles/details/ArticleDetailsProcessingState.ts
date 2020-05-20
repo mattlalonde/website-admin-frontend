@@ -5,5 +5,7 @@ export enum ArticleDetailsProcessingState {
     Deleting,
     Reinstating,
     Publishing,
-    TakingOffline
+    TakingOffline,
+    AddingTag,
+    RemovingTag
 }

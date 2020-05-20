@@ -1,6 +1,6 @@
-import { IArticle, IArticleListItem } from './models';
+import { IArticle, IArticleListResponse } from './models';
 import * as http from '../../utils/http';
-import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest } from './apiRequests';
+import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from './apiRequests';
 import { ApiError } from '../../errors/ApiError';
 
 const root = "/api";
@@ -30,7 +30,7 @@ export const loadArticle = async (articleId: string) => {
 
 export const loadArticles = async () => {
 
-    const response = await http.get<Array<IArticleListItem>>(`${root}/article/all`);
+    const response = await http.get<IArticleListResponse>(`${root}/article/all`);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -82,6 +82,26 @@ export const publishArticle = async (request: IPublishArticleRequest) => {
 
 export const takeArticleOffline = async (request: ITakeArticleOfflineRequest) => {
     const response = await http.put<IArticle>(`${root}/article/${request.id}/takeoffline`);
+
+    if(response.parsedBody) {
+        return response.parsedBody;
+    }
+
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+}
+
+export const addTagToArticle = async (request: IAddTagToArticleRequest) => {
+    const response = await http.put<IArticle>(`${root}/article/${request.id}/addtag`, request.data);
+
+    if(response.parsedBody) {
+        return response.parsedBody;
+    }
+
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+}
+
+export const removeTagFromArticle = async (request: IRemoveTagFromArticleRequest) => {
+    const response = await http.put<IArticle>(`${root}/article/${request.id}/removetag`, request.data);
 
     if(response.parsedBody) {
         return response.parsedBody;

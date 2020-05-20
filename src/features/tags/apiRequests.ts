@@ -3,6 +3,11 @@ export interface ICreateTagRequest {
     description: string;
 }
 
+export interface ISearchTagsRequest {
+    searchTerm: string;
+    excludeIds: Array<string>;
+}
+
 interface IBaseTagRequest {
     id: string;
 }

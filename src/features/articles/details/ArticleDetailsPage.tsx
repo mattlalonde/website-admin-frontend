@@ -11,6 +11,7 @@ import { Tabs, Tab, LinearProgress, Chip } from '@material-ui/core';
 import { TabPanel } from '../../../components/TabPanel/TabPanel';
 import { ArticleStateType, IArticle } from '../models';
 import { ArticlePublishingForm } from './ArticlePublishingForm';
+import { ArticleTags } from './ArticleTags';
 
 interface IArticleDetailsPageProps {
 }
@@ -103,7 +104,7 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
                 id={`tab-panel-${ArticleTabView.Tags}`}
                 aria-labelledby={`tab-${ArticleTabView.Tags}`}
             >
-                <div>tags</div>
+                <ArticleTags tags={loadedArticle?.tags || []} article={loadedArticle} processingState={processingState} />
             </TabPanel>
             <TabPanel
                 value={selectedTab}

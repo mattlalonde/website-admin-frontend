@@ -2,7 +2,7 @@ import React from 'react';
 import StoryRouter from 'storybook-react-router';
 
 import { ArticleListItem } from './ArticleList';
-import articleList from '../__mockData__/list.json';
+import articleListData from '../__mockData__/list.json';
 import { IArticleListItem } from '../models';
 
 export default {
@@ -12,6 +12,6 @@ export default {
 }
 
 export const Default = () => {
-    return <ArticleListItem article={articleList[0] as IArticleListItem} />
+    return <ArticleListItem article={articleListData.entities.articles[articleListData.result[0]] as IArticleListItem} tags={articleListData.entities.tags} />
 }
 

@@ -1,13 +1,21 @@
 
 export type ArticleStateType = 'DRAFT' | 'PUBLISHED' | 'DELETED';
 
+export interface IArticleListResponse {
+    entities: {
+        articles: Record<string, IArticleListItem>;
+        tags: Record<string, IArticleTag>;
+    }
+    result: Array<string>;
+}
+
 export interface IArticleListItem {
-    ownerUserId: string;
     id: string;
     createdTimestamp: string;
     title: string;
-    precis?: string;
+    precis?: string | null;
     state: ArticleStateType;
+    tags: Array<string>;
 }
 
 export interface IArticle {
@@ -19,5 +27,11 @@ export interface IArticle {
     createdTimestamp: string;
     state: ArticleStateType;
     publicationDate?: string | null;
+    tags: Array<IArticleTag> | null;
+}
+
+export interface IArticleTag {
+    tagId: string;
+    name: string;
 }
 

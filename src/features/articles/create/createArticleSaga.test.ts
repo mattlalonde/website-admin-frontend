@@ -7,7 +7,7 @@ import createRootReducer from '../../../app/rootReducer';
 import * as createArticleActions from './articleCreateSlice';
 import * as articleDetailsActions from '../details/articleDetailsSlice';
 import * as articleListActions from '../list/articleListSlice';
-import { watchCreateArticleSaga } from './sagas';
+import { watchCreateArticleSaga } from './createArticleSaga';
 import { createArticle } from '../api';
 import { IArticleCreateState } from './articleCreateSlice';
 import { IArticleDetailsState } from '../details/articleDetailsSlice';

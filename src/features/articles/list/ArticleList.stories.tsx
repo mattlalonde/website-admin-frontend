@@ -2,8 +2,8 @@ import React from 'react';
 import StoryRouter from 'storybook-react-router';
 
 import { ArticleList } from './ArticleList';
-import articleList from '../__mockData__/list.json';
-import { IArticleListItem } from '../models';
+import listData from '../__mockData__/list.json';
+import { IArticleListItem, IArticleTag } from '../models';
 
 export default {
     component: ArticleList,
@@ -11,10 +11,15 @@ export default {
     decorators: [StoryRouter()]
 }
 
+interface IEntityData {
+    articles: Record<string, IArticleListItem>;
+    tags: Record<string, IArticleTag>;
+}
+
 export const Default = () => {
-    return <ArticleList articles={articleList as Array<IArticleListItem>} isLoading={false} />
+    return <ArticleList entities={listData.entities as IEntityData} orderedArticleIds={listData.result} isLoading={false} />
 }
 
 export const Loading = () => {
-    return <ArticleList articles={[]} isLoading={true} /> 
+    return <ArticleList entities={{ articles: {}, tags: {}}} orderedArticleIds={[]} isLoading={true} /> 
 }
