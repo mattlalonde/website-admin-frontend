@@ -1,63 +1,48 @@
 import React, { FunctionComponent } from 'react';
-import { Link } from 'react-router-dom';
 
-import { IArticleListItem } from '../models';
-import { Paper, Box } from '@material-ui/core';
-import { styled } from '@material-ui/core/styles';
-import { ArticleListItemLoading } from './ArticleListItemLoading';
+import { IArticleListItem, IArticleTag } from '../models';
+import { ListLoading } from '../../../components/Lists/ListLoading/ListLoading';
 import { Alert } from '@material-ui/lab';
-
-const ArticleListItemContainer = styled(Paper)({
-    padding: '1em',
-    margin: '1em 0 1em 0',
-    cursor: 'pointer',
-    border: 'solid 1px transparent',
-    transition: 'all .1s',
-    '&:hover': {
-        backgroundColor: '#fdfdfd',
-        boxShadow: 'none',
-        border: 'solid 1px #dddddd'
-    }
-});
-
-const NoUnderlineLink = styled(Link)({
-    textDecoration: 'none'
-});
-
+import { ListItemContainer } from '../../../components/Lists/ListItemContainer';
+import { NoUnderlineLink } from '../../../components/Links/NoUnderlineLink';
+import { Box, Chip } from '@material-ui/core';
 
 interface IArticleListProps {
-    articles: Array<IArticleListItem>;
+    entities: {
+        articles: Record<string, IArticleListItem>;
+        tags: Record<string, IArticleTag>;
+    }
+    orderedArticleIds: Array<string>;
     isLoading: boolean;
 }
 
 interface IArticleListItemProps {
     article: IArticleListItem;
+    tags: Record<string, IArticleTag>;
 }
 
-export const ArticleListItem: FunctionComponent<IArticleListItemProps> = ({ article }) => {
-
+export const ArticleListItem: FunctionComponent<IArticleListItemProps> = ({ article, tags }) => {
     return (
         <NoUnderlineLink to={`/article-details/${article.id}`}>
-            <ArticleListItemContainer key={article.id}> 
+            <ListItemContainer key={article.id}> 
                 <h1>{article.title}</h1>
-                <div>{article.precis || 'no precis'}</div>
-            </ArticleListItemContainer>
+                <Box m={2}>{article.precis || 'no precis'}</Box>
+                <Box mt={2}>
+                    {article.tags.map(tagId => {
+                        return <Chip color='primary' label={tags[tagId].name} />
+                    })}
+                </Box>
+            </ListItemContainer>
         </NoUnderlineLink>
     )
 }
 
-export const ArticleList: FunctionComponent<IArticleListProps> = ({ articles, isLoading }) => {
+export const ArticleList: FunctionComponent<IArticleListProps> = ({ entities, orderedArticleIds, isLoading }) => {
 
     if(isLoading) {
-        return (
-            <>
-                <ArticleListItemLoading />
-                <ArticleListItemLoading />
-                <ArticleListItemLoading />
-            </>
-        )
+        return <ListLoading />
     }
-    else if(articles.length === 0) {
+    else if(orderedArticleIds.length === 0) {
         return (
             <Box my={2}>
                 <Alert severity='info'>
@@ -68,7 +53,7 @@ export const ArticleList: FunctionComponent<IArticleListProps> = ({ articles, is
     }
     else {
         return <>
-            {articles.map(article => <ArticleListItem article={article} key={article.id} />)}
+            {orderedArticleIds.map(id => <ArticleListItem article={entities.articles[id]} tags={entities.tags} key={id} />)}
         </>
     }
 }

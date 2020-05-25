@@ -14,9 +14,21 @@ export interface IUpdateArticleContentRequest extends IBaseArticleRequest {
     }
 }
 
-export interface IPublichArticleRequest extends IBaseArticleRequest {
+export interface IPublishArticleRequest extends IBaseArticleRequest {
     data: {
         publicationDate: string;
+    }
+}
+
+export interface IAddTagToArticleRequest extends IBaseArticleRequest {
+    data: {
+        tagId: string;
+    }
+}
+
+export interface IRemoveTagFromArticleRequest extends IBaseArticleRequest {
+    data: {
+        tagId: string;
     }
 }
 

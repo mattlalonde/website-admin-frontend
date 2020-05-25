@@ -10,13 +10,13 @@ import 'typeface-roboto';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import createRootReducer from '../src/app/rootReducer';
+//import createRootReducer from '../src/app/rootReducer';
 
-const rootReducer = createRootReducer();
-const store = createStore(rootReducer);
+//const rootReducer = createRootReducer();
+//const store = createStore(rootReducer);
 
 addDecorator(storyFn => (
-            <Provider store={store}>
+            <>
                 <CssBaseline />
                 <ThemeProvider theme={theme}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -25,5 +25,5 @@ addDecorator(storyFn => (
                         </Container>
                     </MuiPickersUtilsProvider>
                 </ThemeProvider>
-            </Provider>
+            </>
         ));

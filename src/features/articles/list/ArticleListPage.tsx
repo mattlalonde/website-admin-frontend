@@ -7,13 +7,12 @@ import { ArticleList } from './ArticleList';
 import { setCreateArticlePopupVisibility, createArticleRequest } from '../create/articleCreateSlice';
 import { Button, LinearProgress, Box } from '@material-ui/core';
 import { CreateArticleDialog } from '../create/CreateArticleDialog';
-import { Alert } from '@material-ui/lab';
 import { ICreateArticleRequest } from '../apiRequests';
 
 export const ArticleListPage: FunctionComponent = () => {
 
     const dispatch = useDispatch();
-    const { articles, isLoading, error } = useSelector(
+    const { entities, result, isLoading } = useSelector(
         (state: RootState) => state.articleList
     );
 
@@ -37,21 +36,9 @@ export const ArticleListPage: FunctionComponent = () => {
         dispatch(createArticleRequest(content));
     }
 
-    if(error) {
-        return (
-            <Box my={2}>
-                <Alert severity='error'>
-                    { typeof error === 'string'
-                        ? error
-                        : error.message}
-                </Alert>
-            </Box>
-        )
-    }
-
     return (
         <>
-            {isLoading ? <LinearProgress color='secondary' /> : null}
+            {isLoading && <LinearProgress color='secondary' />}
             <Box my={2}>
                 <Button
                     variant='contained' 
@@ -67,7 +54,7 @@ export const ArticleListPage: FunctionComponent = () => {
                 isPopupOpen={isPopupOpen}
                 isCreating={isCreating}
                 createArticleServerError={createArticleServerError} />
-            <ArticleList articles={articles} isLoading={isLoading} />
+            <ArticleList entities={entities} orderedArticleIds={result} isLoading={isLoading} />
         </>
     )
 }

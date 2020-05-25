@@ -1,6 +1,7 @@
-import { IArticle, IArticleListItem } from './models';
+import { IArticle, IArticleListResponse } from './models';
 import * as http from '../../utils/http';
-import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublichArticleRequest, ITakeArticleOfflineRequest } from './apiRequests';
+import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from './apiRequests';
+import { ApiError } from '../../errors/ApiError';
 
 const root = "/api";
 
@@ -13,7 +14,7 @@ export const createArticle = async (request: ICreateArticleRequest) => {
         return response.parsedBody;
     }
     
-    throw new Error('Unable to create article');
+    throw ApiError.create('API_ERROR', 'Unable to create article');
 }
 
 export const loadArticle = async (articleId: string) => {
@@ -24,18 +25,18 @@ export const loadArticle = async (articleId: string) => {
         return response.parsedBody;
     }
 
-    throw new Error('Unable to find article');
+    throw ApiError.create('API_ERROR', 'Unable to find article');
 }
 
 export const loadArticles = async () => {
 
-    const response = await http.get<Array<IArticleListItem>>(`${root}/article/all`);
+    const response = await http.get<IArticleListResponse>(`${root}/article/all`);
 
     if(response.parsedBody) {
         return response.parsedBody;
     }
 
-    throw new Error('Unable to find articles');
+    throw ApiError.create('API_ERROR', 'Unable to find articles');
 }
 
 export const updateArticleContent = async (request: IUpdateArticleContentRequest) => {
@@ -46,7 +47,7 @@ export const updateArticleContent = async (request: IUpdateArticleContentRequest
         return response.parsedBody;
     }
 
-    throw new Error('No article was returned, please refresh the page to make sure the article was updated.');
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to make sure the article was updated.');
 }
 
 export const deleteArticle = async(request: IDeleteArticleRequest) => {
@@ -56,7 +57,7 @@ export const deleteArticle = async(request: IDeleteArticleRequest) => {
         return response.parsedBody;
     }
 
-    throw new Error('No article was returned, please refresh the page to ensure the article state has been updated.');
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
 }
 
 export const reinstateArticle = async(request: IReinstateArticleRequest) => {
@@ -66,17 +67,17 @@ export const reinstateArticle = async(request: IReinstateArticleRequest) => {
         return response.parsedBody;
     }
 
-    throw new Error('No article was returned, please refresh the page to ensure the article state has been updated.');
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
 }
 
-export const publishArticle = async (request: IPublichArticleRequest) => {
+export const publishArticle = async (request: IPublishArticleRequest) => {
     const response = await http.put<IArticle>(`${root}/article/${request.id}/publish`, request.data);
 
     if(response.parsedBody) {
         return response.parsedBody;
     }
 
-    throw new Error('No article was returned, please refresh the page to ensure the article state has been updated.');
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
 }
 
 export const takeArticleOffline = async (request: ITakeArticleOfflineRequest) => {
@@ -86,5 +87,25 @@ export const takeArticleOffline = async (request: ITakeArticleOfflineRequest) =>
         return response.parsedBody;
     }
 
-    throw new Error('No article was returned, please refresh the page to ensure the article state has been updated.');
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+}
+
+export const addTagToArticle = async (request: IAddTagToArticleRequest) => {
+    const response = await http.put<IArticle>(`${root}/article/${request.id}/addtag`, request.data);
+
+    if(response.parsedBody) {
+        return response.parsedBody;
+    }
+
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+}
+
+export const removeTagFromArticle = async (request: IRemoveTagFromArticleRequest) => {
+    const response = await http.put<IArticle>(`${root}/article/${request.id}/removetag`, request.data);
+
+    if(response.parsedBody) {
+        return response.parsedBody;
+    }
+
+    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
 }

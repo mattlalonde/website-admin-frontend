@@ -1,16 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IArticleListItem } from '../models';
+import { IArticleListItem, IArticleTag, IArticleListResponse } from '../models';
 
 export interface IArticleListState {
-    articles: Array<IArticleListItem>;
+    entities: {
+        articles: Record<string, IArticleListItem>;
+        tags: Record<string, IArticleTag>;
+    }
+    result: Array<string>;
     isLoading: boolean;
-    error: Error | string | null;
 }
 
 const initialState: IArticleListState = {
-    articles: [],
-    isLoading: false,
-    error: null
+    entities: {
+        articles: {},
+        tags: {},
+    },
+    result:[],
+    isLoading: false
 };
 
 const articleList = createSlice({
@@ -19,20 +25,19 @@ const articleList = createSlice({
     reducers: {
         loadArticlesRequest(state) {
             state.isLoading = true;
-            state.error = null;
         },
-        loadArticlesSuccess(state, action: PayloadAction<Array<IArticleListItem>>) {
-            state.articles = action.payload;
+        loadArticlesSuccess(state, action: PayloadAction<IArticleListResponse>) {
+            state.entities.articles = action.payload.entities.articles;
+            state.entities.tags = action.payload.entities.tags;
+            state.result = action.payload.result;
             state.isLoading = false;
-            state.error = null;
         },
-        loadArticlesFailed(state, action: PayloadAction<{ error: Error | string }>) {
-            state.articles = [];
+        loadArticlesFailed(state) {
             state.isLoading = false;
-            state.error = action.payload.error;
         },
         addArticleToList(state, action: PayloadAction<IArticleListItem>) {
-            state.articles.unshift(action.payload);
+            state.entities.articles[action.payload.id] = action.payload;
+            state.result.unshift(action.payload.id);
         }
     }
 });

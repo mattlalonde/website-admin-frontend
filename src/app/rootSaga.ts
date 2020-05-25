@@ -1,14 +1,12 @@
 import { all, fork } from 'redux-saga/effects'
 
-import articleListSaga from '../features/articles/list/sagas';
-import articleDetailsSaga from '../features/articles/details/sagas';
-import articleCreateSaga from '../features/articles/create/sagas';
+import articleSagas from '../features/articles/articleSagas';
+import tagSagas from '../features/tags/sagas';
 
 export default function* rootSaga() {
     yield all([
-        fork(articleListSaga), 
-        fork(articleDetailsSaga),
-        fork(articleCreateSaga)
+        fork(articleSagas), 
+        fork(tagSagas)
     ]);
 }
 

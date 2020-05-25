@@ -34,9 +34,6 @@ export const ErrorDialog: FunctionComponent<IErrorDialogPopupProps> = ({handleCl
                 </ErrorDialogTitle>
                 <DialogContent>
                     <Box my={2}>
-                        <strong>Timestamp:</strong> {error.apierror.timestamp}
-                    </Box>
-                    <Box my={2}>
                         <strong>Status:</strong> {error.apierror.status}
                     </Box>
                     <Box my={2}>

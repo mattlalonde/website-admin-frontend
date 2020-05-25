@@ -1,10 +1,11 @@
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { watchLoadArticlesSaga } from './sagas';
+import { watchLoadArticlesSaga } from './loadArticlesSaga';
 import reducer, * as actions from './articleListSlice';
 import { loadArticles } from '../api';
 import articleList from '../__mockData__/list.json';
 import { throwError } from 'redux-saga-test-plan/providers';
+import { IArticleListItem } from '../models';
 
 
 describe('load article list saga', () => {
@@ -35,7 +36,7 @@ describe('load article list saga', () => {
                 .provide([
                     [matchers.call.fn(loadArticles), articleList]
                 ])
-                .put(actions.loadArticlesSuccess(articleList))
+                .put(actions.loadArticlesSuccess(articleList as Array<IArticleListItem>))
                 .dispatch(actions.loadArticlesRequest())
                 .silentRun()
                 .then(result => {
