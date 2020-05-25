@@ -1,4 +1,4 @@
-import { ITag } from './models';
+import { ITag, ITagListResponse } from './models';
 import * as http from '../../utils/http';
 import { ICreateTagRequest, IUpdateTagRequest, ISearchTagsRequest } from './apiRequests';
 import { ApiError } from '../../errors/ApiError';
@@ -36,7 +36,7 @@ export const loadTag = async (tagId: string) => {
 }
 
 export const loadTags = async () => {
-    const response = await http.get<Array<ITag>>(`${root}/tag/all`);
+    const response = await http.get<ITagListResponse>(`${root}/tag/all`);
 
     if(response.parsedBody) {
         return response.parsedBody;

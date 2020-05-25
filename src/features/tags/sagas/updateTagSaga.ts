@@ -1,16 +1,17 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 
-import * as actions from '../tagDetailsSlice';
-import * as errors from '../../../errors/errorsSlice';
-import * as api from '../../api';
+import * as actions from '../tagSlice';
+import * as errors from '../../errors/errorsSlice';
+import * as api from '../api';
+import { ITag } from '../models';
 
 function* updateTagSaga(action) {
     try {
-        const data = yield call(api.updateTag, action.payload);
+        const data: ITag = yield call(api.updateTag, action.payload);
         yield put(actions.updateTagSuccess(data));
     }
     catch(error) {
-        yield put(actions.updateTagFailed(error.apiErrorData));
+        yield put(actions.updateTagFailed());
         yield put(errors.setError(error.apiErrorData));
     }
 }

@@ -1,35 +1,32 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadTagsRequest } from './tagListSlice';
+import { loadTagsRequest, openCreateTagPopup, closeCreateTagPopup, createTagRequest } from '../tagSlice';
 import { RootState } from '../../../app/store';
 import { LinearProgress, Box, Button } from '@material-ui/core';
 import { TagList } from './TagList';
-import { setCreateTagPopupVisibility, createTagRequest } from '../create/tagCreateSlice';
 import { ICreateTagRequest } from '../apiRequests';
 import { CreateTagDialog } from '../create/CreateTagDialog';
 
 export const TagListPage: FunctionComponent = () => {
 
     const dispatch = useDispatch();
-    const { tags, isLoading } = useSelector(
-        (state: RootState) => state.tagList
-    );
-
-    const { isTagCreatePopupOpen, isCreatingTag } = useSelector(
-        (state: RootState) => state.tagCreate
+    const { listResult, listInitialised, isLoading, isCreatePopupOpen, isCreating } = useSelector(
+        (state: RootState) => state.tags
     );
 
     useEffect(() => {
-        dispatch(loadTagsRequest());
-    }, [dispatch]);
+        if(!listInitialised) {
+            dispatch(loadTagsRequest());
+        }
+    }, [dispatch, listInitialised]);
 
     const onCreateTagClick = () => {
-        dispatch(setCreateTagPopupVisibility(true));
+        dispatch(openCreateTagPopup());
     }
 
     const onCloseCreateTagPopup = () => {
-        dispatch(setCreateTagPopupVisibility(false));
+        dispatch(closeCreateTagPopup());
     }
 
     const onSubmitCreateTag = (content: ICreateTagRequest) => {
@@ -51,9 +48,9 @@ export const TagListPage: FunctionComponent = () => {
             <CreateTagDialog
                 handleClose={onCloseCreateTagPopup}
                 onSubmit={onSubmitCreateTag}
-                isPopupOpen={isTagCreatePopupOpen}
-                isCreating={isCreatingTag} />
-            <TagList tags={tags} isLoading={isLoading} />
+                isPopupOpen={isCreatePopupOpen}
+                isCreating={isCreating} />
+            <TagList orderedTagIds={listResult} isLoading={isLoading} />
         </>
     )
 

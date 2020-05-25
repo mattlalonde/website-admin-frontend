@@ -1,32 +1,56 @@
-[
-    {
-        "id": "52b4ca03-ca31-4af3-b331-124d0e567940",
-        "name": "tag name",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+{
+    "entities": {
+        "tags": {
+            "171d26ed-6136-4268-83e0-08e4553d0fa6": {
+                "id": "171d26ed-6136-4268-83e0-08e4553d0fa6",
+                "name": "spring",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "69c54f5d-277b-4308-a2e5-25b6018eba70": {
+                "id": "69c54f5d-277b-4308-a2e5-25b6018eba70",
+                "name": "java",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "bc19aab9-deae-4541-a155-4b2833997ea2": {
+                "id": "bc19aab9-deae-4541-a155-4b2833997ea2",
+                "name": "reactjs",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "91fedcd5-d48f-4da7-8b38-49807502e563": {
+                "id": "91fedcd5-d48f-4da7-8b38-49807502e563",
+                "name": "d3",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "419b761b-224e-4e25-be74-411ee9723f09": {
+                "id": "419b761b-224e-4e25-be74-411ee9723f09",
+                "name": "US",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "92627d4e-6a2e-4fbf-9cdd-5f335c5d11a3": {
+                "id": "92627d4e-6a2e-4fbf-9cdd-5f335c5d11a3",
+                "name": "Typescript",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "d860b191-e95f-4143-8fe9-ce20e27458ce": {
+                "id": "d860b191-e95f-4143-8fe9-ce20e27458ce",
+                "name": "UK",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            },
+            "52b4ca03-ca31-4af3-b331-124d0e567940": {
+                "id": "52b4ca03-ca31-4af3-b331-124d0e567940",
+                "name": "charts",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
+            }
+        }
     },
-    {
-        "id": "52b4ca03-ca31-4af3-b331-124d0e567941",
-        "name": "tag name",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
-    },
-    {
-        "id": "52b4ca03-ca31-4af3-b331-124d0e567942",
-        "name": "tag name",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
-    },
-    {
-        "id": "52b4ca03-ca31-4af3-b331-124d0e567943",
-        "name": "tag name",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
-    },
-    {
-        "id": "52b4ca03-ca31-4af3-b331-124d0e567944",
-        "name": "tag name",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
-    },
-    {
-        "id": "52b4ca03-ca31-4af3-b331-124d0e567945",
-        "name": "tag name",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis placerat sit amet turpis eu dapibus."
-    }
-]
+    "result": [
+        "92627d4e-6a2e-4fbf-9cdd-5f335c5d11a3",
+        "d860b191-e95f-4143-8fe9-ce20e27458ce",
+        "419b761b-224e-4e25-be74-411ee9723f09",
+        "52b4ca03-ca31-4af3-b331-124d0e567940",
+        "91fedcd5-d48f-4da7-8b38-49807502e563",
+        "69c54f5d-277b-4308-a2e5-25b6018eba70",
+        "bc19aab9-deae-4541-a155-4b2833997ea2",
+        "171d26ed-6136-4268-83e0-08e4553d0fa6"
+    ]
+}

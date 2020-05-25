@@ -1,22 +1,26 @@
 import React, { FunctionComponent } from 'react';
 
-import { ITag } from '../models';
 import { NoUnderlineLink } from '../../../components/Links/NoUnderlineLink';
 import { ListItemContainer } from '../../../components/Lists/ListItemContainer';
 import { ListLoading } from '../../../components/Lists/ListLoading/ListLoading';
 import { Box } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import { RootState } from '../../../app/store';
+import { useSelector } from 'react-redux';
 
 interface ITagListProps {
-    tags: Array<ITag>;
+    orderedTagIds: Array<string>;
     isLoading: boolean;
 }
 
 interface ITagListItemProps {
-    tag: ITag;
+    tagId: string;
 }
 
-export const TagListItem: FunctionComponent<ITagListItemProps> = ({ tag }) => {
+export const TagListItem: FunctionComponent<ITagListItemProps> = ({ tagId }) => {
+
+    const tag = useSelector((state: RootState) => state.entities.tags[tagId]);
+
     return (
         <NoUnderlineLink to={`/tag-details/${tag.id}`}>
             <ListItemContainer key={tag.id}> 
@@ -27,12 +31,12 @@ export const TagListItem: FunctionComponent<ITagListItemProps> = ({ tag }) => {
     )
 }
 
-export const TagList: FunctionComponent<ITagListProps> = ({ tags, isLoading }) => {
+export const TagList: FunctionComponent<ITagListProps> = ({ orderedTagIds, isLoading }) => {
     
     if(isLoading) {
         return <ListLoading />
     }
-    else if(tags.length === 0) {
+    else if(orderedTagIds.length === 0) {
         return (
             <Box my={2}>
                 <Alert severity='info'>
@@ -43,7 +47,7 @@ export const TagList: FunctionComponent<ITagListProps> = ({ tags, isLoading }) =
     }
     else {
         return <>
-            {tags.map(tag => <TagListItem tag={tag} key={tag.id} />)}
+            {orderedTagIds.map(tagId => <TagListItem tagId={tagId} key={tagId} />)}
         </>
     }
 }

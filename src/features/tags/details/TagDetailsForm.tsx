@@ -6,7 +6,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { ITag } from '../models';
 import { TagDetailsProcessingState } from './TagDetailsProcessingState';
 import { useDispatch } from 'react-redux';
-import { updateTagRequest } from './tagDetailsSlice';
+import { updateTagRequest } from '../tagSlice';
 import { TagDetailsLoading } from './TagDetailsLoading';
 
 interface ITagDetailsFormValues {
