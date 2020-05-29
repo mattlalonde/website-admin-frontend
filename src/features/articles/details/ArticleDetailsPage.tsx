@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import { RootState } from '../../../app/store';
-import { loadArticleRequest } from './articleDetailsSlice';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 import { ArticleDetailsForm } from './ArticleDetailsForm';
 import { Tabs, Tab, LinearProgress, Chip } from '@material-ui/core';
@@ -12,6 +11,7 @@ import { TabPanel } from '../../../components/TabPanel/TabPanel';
 import { ArticleStateType, IArticle } from '../models';
 import { ArticlePublishingForm } from './ArticlePublishingForm';
 import { ArticleTags } from './ArticleTags';
+import articleActions from '../articleActions';
 
 interface IArticleDetailsPageProps {
 }
@@ -53,30 +53,27 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
     const [selectedTab, setSelectedTab] = useState(ArticleTabView.Details);
 
     const dispatch = useDispatch();
-    const { processingState, loadedArticle } = useSelector(
-        (state: RootState) => state.articleDetails
-    );
+    const { processingState } = useSelector((state: RootState) => state.articlesUi.details);
+    const article = useSelector((state: RootState) => state.entities.articles[id]);
 
     const isProcessing = processingState !== ArticleDetailsProcessingState.None;
 
     useEffect(() => {
-        if(loadedArticle?.id !== id) {
-            dispatch(loadArticleRequest(id));
-        }
+        dispatch(articleActions.loadArticleRequest(id));
 
         // cleanup loaded article ?
         /* return () => {
             
         }; */
-    }, [dispatch, id, loadedArticle]);
+    }, [dispatch, id]);
 
     return (
         <>
             { isProcessing ? <LinearProgress color='secondary' /> : null}
             { processingState === ArticleDetailsProcessingState.Loading ? null : 
                 <h2>
-                    <Chip variant='outlined' label={getChipText(loadedArticle)} color={getChipColor(loadedArticle?.state || 'DRAFT')} />
-                    <span>{loadedArticle?.title}</span>
+                    <Chip variant='outlined' label={getChipText(article)} color={getChipColor(article?.state || 'DRAFT')} />
+                    <span>{article?.title}</span>
                 </h2>}
             <Tabs
                 value={selectedTab}
@@ -86,7 +83,7 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
                 <Tab label='Details' id={`tab-${ArticleTabView.Details}`} aria-controls={`tab-panel-${ArticleTabView.Details}`}></Tab>
                 <Tab label='Tags' id={`tab-${ArticleTabView.Tags}`} aria-controls={`tab-panel-${ArticleTabView.Tags}`}></Tab>
                 <Tab label='Authors' id={`tab-${ArticleTabView.Authors}`} aria-controls={`tab-panel-${ArticleTabView.Authors}`}></Tab>
-                { loadedArticle?.state !== 'DELETED' && <Tab label='Publishing' id={`tab-${ArticleTabView.Publishing}`} aria-controls={`tab-panel-${ArticleTabView.Publishing}`}></Tab> }
+                { article?.state !== 'DELETED' && <Tab label='Publishing' id={`tab-${ArticleTabView.Publishing}`} aria-controls={`tab-panel-${ArticleTabView.Publishing}`}></Tab> }
             </Tabs>
             <TabPanel
                 value={selectedTab}
@@ -95,7 +92,7 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
                 aria-labelledby={`tab-${ArticleTabView.Details}`}
             >
                 <ArticleDetailsForm 
-                    article={loadedArticle}
+                    article={article}
                     processingState={processingState} />
             </TabPanel>
             <TabPanel
@@ -104,7 +101,7 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
                 id={`tab-panel-${ArticleTabView.Tags}`}
                 aria-labelledby={`tab-${ArticleTabView.Tags}`}
             >
-                <ArticleTags tags={loadedArticle?.tags || []} article={loadedArticle} processingState={processingState} />
+                {article && <ArticleTags article={article} processingState={processingState} /> }
             </TabPanel>
             <TabPanel
                 value={selectedTab}
@@ -120,9 +117,7 @@ export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (
                 id={`tab-panel-${ArticleTabView.Publishing}`}
                 aria-labelledby={`tab-${ArticleTabView.Publishing}`}
             >
-                <ArticlePublishingForm
-                    article={loadedArticle}
-                    processingState={processingState} />
+                {article && <ArticlePublishingForm article={article} processingState={processingState} /> }
             </TabPanel>
         </>
         

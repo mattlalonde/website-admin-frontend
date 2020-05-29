@@ -1,37 +1,29 @@
+import { ITag } from "../tags/models";
 
 export type ArticleStateType = 'DRAFT' | 'PUBLISHED' | 'DELETED';
 
 export interface IArticleListResponse {
     entities: {
-        articles: Record<string, IArticleListItem>;
-        tags: Record<string, IArticleTag>;
+        articles: Record<string, IArticle>;
+        tags: Record<string, ITag>;
     }
     result: Array<string>;
 }
 
-export interface IArticleListItem {
-    id: string;
-    createdTimestamp: string;
-    title: string;
-    precis?: string | null;
-    state: ArticleStateType;
-    tags: Array<string>;
+export interface IArticleResponse {
+    article: IArticle;
+    tags: Record<string, ITag>;
 }
 
 export interface IArticle {
     ownerUserId: string;
     id: string;
     title: string;
-    precis?: string;
-    body?: string;
+    precis?: string | null;
+    body?: string | null;
     createdTimestamp: string;
     state: ArticleStateType;
     publicationDate?: string | null;
-    tags: Array<IArticleTag> | null;
-}
-
-export interface IArticleTag {
-    tagId: string;
-    name: string;
+    tags: Array<string> | null;
 }
 

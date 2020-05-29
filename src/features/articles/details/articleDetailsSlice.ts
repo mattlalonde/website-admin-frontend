@@ -1,20 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IArticle } from '../models';
+import { IArticleResponse } from '../models';
 import { IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from '../apiRequests';
 import { IApiErrorData } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
-import { ITag } from '../../tags/models';
 
 export interface IArticleDetailsState {
-    loadedArticle: IArticle | null;
     processingState: ArticleDetailsProcessingState;
-    loadedArticleTags: Array<ITag> | null;
 }
 
 const initialState: IArticleDetailsState = {
-    loadedArticle: null,
-    processingState: ArticleDetailsProcessingState.None,
-    loadedArticleTags: null
+    processingState: ArticleDetailsProcessingState.None
 };
 
 const articleDetails = createSlice({
@@ -45,20 +40,11 @@ const articleDetails = createSlice({
         removeTagFromArticleRequest(state, action: PayloadAction<IRemoveTagFromArticleRequest>) {
             state.processingState = ArticleDetailsProcessingState.RemovingTag;
         },
-        articleActionSuccess(state, action: PayloadAction<IArticle>) {
-            state.loadedArticle = action.payload;
+        articleDetailsActionSuccess(state, action: PayloadAction<IArticleResponse>) {
             state.processingState = ArticleDetailsProcessingState.None;
         },
-        articleActionFailed(state, action: PayloadAction<IApiErrorData>) {
+        articleDetailsActionFailed(state, action: PayloadAction<IApiErrorData>) {
             state.processingState = ArticleDetailsProcessingState.None;
-        },
-        unloadLoadedArticle(state) {
-            state.processingState = ArticleDetailsProcessingState.None;
-            state.loadedArticle = null;
-        },
-        setLoadedArticle(state, action: PayloadAction<IArticle>) {
-            state.processingState = ArticleDetailsProcessingState.None;
-            state.loadedArticle = action.payload;
         }
     }
 });
@@ -72,10 +58,8 @@ export const {
     takeArticleOfflineRequest,
     addTagToArticleRequest,
     removeTagFromArticleRequest,
-    articleActionSuccess,
-    articleActionFailed,
-    unloadLoadedArticle,
-    setLoadedArticle
+    articleDetailsActionSuccess,
+    articleDetailsActionFailed
 } = articleDetails.actions;
 
 export default articleDetails.reducer;

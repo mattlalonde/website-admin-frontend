@@ -9,5 +9,5 @@ export interface ITagListResponse {
 export interface ITag {
     id: string;
     name: string;
-    description: string;
+    description?: string | null;
 }

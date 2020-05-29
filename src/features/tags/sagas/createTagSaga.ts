@@ -8,7 +8,6 @@ function* createTagSaga(action) {
     try {
         const data = yield call(createTag, action.payload);
         yield put(tagActions.createTagSuccess(data));
-        yield put(tagActions.closeCreateTagPopup());
     }
     catch(error) {
         yield put(tagActions.createTagFailed());

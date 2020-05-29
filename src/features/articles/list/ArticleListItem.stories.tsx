@@ -3,7 +3,16 @@ import StoryRouter from 'storybook-react-router';
 
 import { ArticleListItem } from './ArticleList';
 import articleListData from '../__mockData__/list.json';
-import { IArticleListItem } from '../models';
+import initialStoreState from '../../../app/initialStoreStateTesting';
+import { createStoreWithState } from '../../../testUtils/store';
+import { Provider } from 'react-redux';
+
+const state = Object.assign(initialStoreState, {
+    entities: articleListData.entities,
+    tagsUi: {
+        listResult: articleListData.result
+    }
+});
 
 export default {
     component: ArticleListItem,
@@ -12,6 +21,12 @@ export default {
 }
 
 export const Default = () => {
-    return <ArticleListItem article={articleListData.entities.articles[articleListData.result[0]] as IArticleListItem} tags={articleListData.entities.tags} />
+    return (
+        <Provider store={createStoreWithState(state)}>
+            <ArticleListItem articleId={articleListData.result[0]} />
+        </Provider>
+    )
+    
+    
 }
 

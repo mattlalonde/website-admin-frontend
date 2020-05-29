@@ -48,6 +48,7 @@ const tags = createSlice({
         createTagSuccess(state, action: PayloadAction<ITag>) {
             state.listResult.unshift(action.payload.id);
             state.isCreating = false;
+            state.isCreatePopupOpen = false;
         },
         createTagFailed(state) {
             state.isCreating = false;

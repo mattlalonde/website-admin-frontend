@@ -5,15 +5,16 @@ import { Provider } from 'react-redux';
 import { TagList } from './TagList';
 import tagList from '../__mockData__/tagList.json';
 import { createStoreWithState } from '../../../testUtils/store';
+import initialStoreState from '../../../app/initialStoreStateTesting';
 
-const state = {
-    tags: {
-        listResult: tagList.result
-    },
+const state = Object.assign(initialStoreState, {
     entities: {
         tags: tagList.entities.tags
+    },
+    tagsUi: {
+        listResult: tagList.result
     }
-};
+});
 
 export default {
     component: TagList,
