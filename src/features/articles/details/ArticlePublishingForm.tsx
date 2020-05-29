@@ -17,7 +17,7 @@ interface IArticlePublishingFormValues {
 }
 
 interface IArticlePublishingFormProps {
-    article: IArticle | null,
+    article: IArticle,
     processingState: ArticleDetailsProcessingState
 }
 
@@ -39,7 +39,7 @@ export const ArticlePublishingForm: FunctionComponent<IArticlePublishingFormProp
     const dispatch = useDispatch();
     const now = new Date();
     const defaultValues = {
-        publicationDate: article?.publicationDate ? new Date(article.publicationDate) : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
+        publicationDate: article.publicationDate ? new Date(article.publicationDate) : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
     }
     const { register, unregister, setValue, handleSubmit, errors, getValues } = useForm<IArticlePublishingFormValues>({defaultValues});
     const isProcessing = processingState !== ArticleDetailsProcessingState.None;
@@ -72,7 +72,7 @@ export const ArticlePublishingForm: FunctionComponent<IArticlePublishingFormProp
     return (
         <form noValidate autoComplete="off" onSubmit={onPublish}>
             <Box my={2}>
-                {article?.state === 'DRAFT' && (
+                {article.state === 'DRAFT' && (
                     <KeyboardDateTimePicker 
                         id='publicationDate'
                         name='publicationDate'
@@ -91,12 +91,12 @@ export const ArticlePublishingForm: FunctionComponent<IArticlePublishingFormProp
                         }}>
                     </KeyboardDateTimePicker>
                 )}
-                {article?.state === 'PUBLISHED' && (
+                {article.state === 'PUBLISHED' && (
                     <Alert severity='info'>{publishedMessage}</Alert>
                 )}
             </Box>
             <Box my={2}>
-                {article?.state ==='DRAFT' && (
+                {article.state ==='DRAFT' && (
                     <Button 
                         type='submit'
                         variant='contained' 
@@ -106,7 +106,7 @@ export const ArticlePublishingForm: FunctionComponent<IArticlePublishingFormProp
                                 Publish
                     </Button>
                 )}
-                {article?.state === 'PUBLISHED' && (
+                {article.state === 'PUBLISHED' && (
                     <Button 
                         type='button'
                         variant='contained'

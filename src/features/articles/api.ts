@@ -1,4 +1,4 @@
-import { IArticle, IArticleListResponse } from './models';
+import { IArticle, IArticleListResponse, IArticleResponse } from './models';
 import * as http from '../../utils/http';
 import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from './apiRequests';
 import { ApiError } from '../../errors/ApiError';
@@ -8,7 +8,7 @@ const root = "/api";
 
 export const createArticle = async (request: ICreateArticleRequest) => {
 
-    const response = await http.post<IArticle>(`${root}/article/create`, request);
+    const response = await http.post<IArticleResponse>(`${root}/article/create`, request);
     
     if(response.parsedBody) {
         return response.parsedBody;
@@ -19,7 +19,7 @@ export const createArticle = async (request: ICreateArticleRequest) => {
 
 export const loadArticle = async (articleId: string) => {
 
-    const response = await http.get<IArticle>(`${root}/article/${articleId}`);
+    const response = await http.get<IArticleResponse>(`${root}/article/${articleId}`);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -41,7 +41,7 @@ export const loadArticles = async () => {
 
 export const updateArticleContent = async (request: IUpdateArticleContentRequest) => {
     
-    const response = await http.put<IArticle>(`${root}/article/${request.id}/update`, request.data);
+    const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/update`, request.data);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -51,7 +51,7 @@ export const updateArticleContent = async (request: IUpdateArticleContentRequest
 }
 
 export const deleteArticle = async(request: IDeleteArticleRequest) => {
-    const response = await http.del<IArticle>(`${root}/article/${request.id}`);
+    const response = await http.del<IArticleResponse>(`${root}/article/${request.id}`);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -61,7 +61,7 @@ export const deleteArticle = async(request: IDeleteArticleRequest) => {
 }
 
 export const reinstateArticle = async(request: IReinstateArticleRequest) => {
-    const response = await http.put<IArticle>(`${root}/article/${request.id}/reinstate`);
+    const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/reinstate`);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -71,7 +71,7 @@ export const reinstateArticle = async(request: IReinstateArticleRequest) => {
 }
 
 export const publishArticle = async (request: IPublishArticleRequest) => {
-    const response = await http.put<IArticle>(`${root}/article/${request.id}/publish`, request.data);
+    const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/publish`, request.data);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -81,7 +81,7 @@ export const publishArticle = async (request: IPublishArticleRequest) => {
 }
 
 export const takeArticleOffline = async (request: ITakeArticleOfflineRequest) => {
-    const response = await http.put<IArticle>(`${root}/article/${request.id}/takeoffline`);
+    const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/takeoffline`);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -91,7 +91,7 @@ export const takeArticleOffline = async (request: ITakeArticleOfflineRequest) =>
 }
 
 export const addTagToArticle = async (request: IAddTagToArticleRequest) => {
-    const response = await http.put<IArticle>(`${root}/article/${request.id}/addtag`, request.data);
+    const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/addtag`, request.data);
 
     if(response.parsedBody) {
         return response.parsedBody;
@@ -101,7 +101,7 @@ export const addTagToArticle = async (request: IAddTagToArticleRequest) => {
 }
 
 export const removeTagFromArticle = async (request: IRemoveTagFromArticleRequest) => {
-    const response = await http.put<IArticle>(`${root}/article/${request.id}/removetag`, request.data);
+    const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/removetag`, request.data);
 
     if(response.parsedBody) {
         return response.parsedBody;

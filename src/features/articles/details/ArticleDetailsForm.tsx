@@ -8,10 +8,10 @@ import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ReplayIcon from '@material-ui/icons/Replay';
 import { useDispatch } from 'react-redux';
-import { updateArticleContentRequest, deleteArticleRequest, reinstateArticleRequest } from './articleDetailsSlice';
 import { ArticleDetailsLoading } from './ArticleDetailsLoading';
 import { IArticle } from '../models';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
+import articleActions from '../articleActions';
 
 interface IArticleDetailsFormValues {
     id: string,
@@ -37,7 +37,7 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
     }, [register, unregister])
 
     const onUpdate = handleSubmit(content => {
-        dispatch(updateArticleContentRequest({
+        dispatch(articleActions.updateArticleContentRequest({
             id: content.id,
             data: {
                 title: content.title,
@@ -49,13 +49,13 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
 
     const onDelete = () => {
         if(article) {
-            dispatch(deleteArticleRequest({ id: article.id }));
+            dispatch(articleActions.deleteArticleRequest({ id: article.id }));
         }
     }
 
     const onReinstate = () => {
         if(article) {
-            dispatch(reinstateArticleRequest({ id: article.id }));
+            dispatch(articleActions.reinstateArticleRequest({ id: article.id }));
         }
     }
 

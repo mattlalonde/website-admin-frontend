@@ -12,7 +12,7 @@ export const TagListPage: FunctionComponent = () => {
 
     const dispatch = useDispatch();
     const { listResult, listInitialised, isLoading, isCreatePopupOpen, isCreating } = useSelector(
-        (state: RootState) => state.tags
+        (state: RootState) => state.tagsUi
     );
 
     useEffect(() => {

@@ -1,39 +1,33 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadArticlesRequest } from './articleListSlice';
 import { RootState } from '../../../app/store';
 import { ArticleList } from './ArticleList';
-import { setCreateArticlePopupVisibility, createArticleRequest } from '../create/articleCreateSlice';
 import { Button, LinearProgress, Box } from '@material-ui/core';
 import { CreateArticleDialog } from '../create/CreateArticleDialog';
 import { ICreateArticleRequest } from '../apiRequests';
+import articleActions from '../articleActions';
 
 export const ArticleListPage: FunctionComponent = () => {
 
     const dispatch = useDispatch();
-    const { entities, result, isLoading } = useSelector(
-        (state: RootState) => state.articleList
-    );
-
-    const { isPopupOpen, isCreating, createArticleServerError } = useSelector(
-        (state: RootState) => state.articleCreate
-    );
+    const { result, isLoading } = useSelector((state: RootState) => state.articlesUi.list);
+    const { isPopupOpen, isCreating, createArticleServerError } = useSelector((state: RootState) => state.articlesUi.create);
 
     useEffect(() => {
-        dispatch(loadArticlesRequest());
+        dispatch(articleActions.loadArticlesRequest());
     }, [dispatch]);
 
     const onCreateArticleClick = () => {
-        dispatch(setCreateArticlePopupVisibility(true));
+        dispatch(articleActions.openCreateArticlePopup());
     }
 
     const onCloseCreateArticlePopup = () => {
-        dispatch(setCreateArticlePopupVisibility(false));
+        dispatch(articleActions.closeCreateArticlePopup());
     }
 
     const onSubmitCreateArticle = (content: ICreateArticleRequest) => {
-        dispatch(createArticleRequest(content));
+        dispatch(articleActions.createArticleRequest(content));
     }
 
     return (
@@ -54,7 +48,7 @@ export const ArticleListPage: FunctionComponent = () => {
                 isPopupOpen={isPopupOpen}
                 isCreating={isCreating}
                 createArticleServerError={createArticleServerError} />
-            <ArticleList entities={entities} orderedArticleIds={result} isLoading={isLoading} />
+            <ArticleList orderedArticleIds={result} isLoading={isLoading} />
         </>
     )
 }

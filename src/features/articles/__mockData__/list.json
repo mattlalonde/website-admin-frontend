@@ -3,6 +3,7 @@
         "articles": {
             "4bb9fcc6-91d6-43d2-9696-9c57bce51b9b": {
                 "id": "4bb9fcc6-91d6-43d2-9696-9c57bce51b9b",
+                "ownerUserId": "user 1",
                 "createdTimestamp": "2020-04-27T16:48:53.63",
                 "publicationDate": null,
                 "state": "DRAFT",
@@ -15,6 +16,7 @@
             },
             "148f85bd-d8cc-4e62-adf9-567cbc61f9ee": {
                 "id": "148f85bd-d8cc-4e62-adf9-567cbc61f9ee",
+                "ownerUserId": "user 1",
                 "createdTimestamp": "2020-05-16T22:50:31.412",
                 "publicationDate": null,
                 "state": "DRAFT",
@@ -24,6 +26,7 @@
             },
             "b162bcf8-0083-44f1-a29d-87d6195cc9f6": {
                 "id": "b162bcf8-0083-44f1-a29d-87d6195cc9f6",
+                "ownerUserId": "user 1",
                 "createdTimestamp": "2020-05-16T22:42:11.701",
                 "publicationDate": null,
                 "state": "DRAFT",
@@ -34,11 +37,11 @@
         },
         "tags": {
             "bc19aab9-deae-4541-a155-4b2833997ea2": {
-                "tagId": "bc19aab9-deae-4541-a155-4b2833997ea2",
+                "id": "bc19aab9-deae-4541-a155-4b2833997ea2",
                 "name": "reactjs"
             },
             "91fedcd5-d48f-4da7-8b38-49807502e563": {
-                "tagId": "91fedcd5-d48f-4da7-8b38-49807502e563",
+                "id": "91fedcd5-d48f-4da7-8b38-49807502e563",
                 "name": "d3"
             }
         }

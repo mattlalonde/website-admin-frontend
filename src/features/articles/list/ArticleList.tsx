@@ -1,35 +1,44 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 
-import { IArticleListItem, IArticleTag } from '../models';
 import { ListLoading } from '../../../components/Lists/ListLoading/ListLoading';
 import { Alert } from '@material-ui/lab';
 import { ListItemContainer } from '../../../components/Lists/ListItemContainer';
 import { NoUnderlineLink } from '../../../components/Links/NoUnderlineLink';
-import { Box, Chip } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+import { RootState } from '../../../app/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { ArticleTag } from '../components/ArticleTag';
+import articleActions from '../articleActions';
 
 interface IArticleListProps {
-    entities: {
-        articles: Record<string, IArticleListItem>;
-        tags: Record<string, IArticleTag>;
-    }
     orderedArticleIds: Array<string>;
     isLoading: boolean;
 }
 
 interface IArticleListItemProps {
-    article: IArticleListItem;
-    tags: Record<string, IArticleTag>;
+    articleId: string;
 }
 
-export const ArticleListItem: FunctionComponent<IArticleListItemProps> = ({ article, tags }) => {
+export const ArticleListItem: FunctionComponent<IArticleListItemProps> = ({ articleId }) => {
+
+    const dispatch = useDispatch();
+    const article = useSelector((state: RootState) => state.entities.articles[articleId]);
+
+    useEffect(() => {
+        if(!article) {
+            dispatch(articleActions.loadArticleRequest(articleId));
+        }
+    })
+
+
     return (
         <NoUnderlineLink to={`/article-details/${article.id}`}>
             <ListItemContainer key={article.id}> 
                 <h1>{article.title}</h1>
                 <Box m={2}>{article.precis || 'no precis'}</Box>
                 <Box mt={2}>
-                    {article.tags.map(tagId => {
-                        return <Chip color='primary' label={tags[tagId].name} />
+                    {article && article.tags && article.tags.map(tagId => {
+                        return <ArticleTag articleId={article.id} tagId={tagId} key={tagId} removable={false} />
                     })}
                 </Box>
             </ListItemContainer>
@@ -37,7 +46,7 @@ export const ArticleListItem: FunctionComponent<IArticleListItemProps> = ({ arti
     )
 }
 
-export const ArticleList: FunctionComponent<IArticleListProps> = ({ entities, orderedArticleIds, isLoading }) => {
+export const ArticleList: FunctionComponent<IArticleListProps> = ({ orderedArticleIds, isLoading }) => {
 
     if(isLoading) {
         return <ListLoading />
@@ -53,7 +62,7 @@ export const ArticleList: FunctionComponent<IArticleListProps> = ({ entities, or
     }
     else {
         return <>
-            {orderedArticleIds.map(id => <ArticleListItem article={entities.articles[id]} tags={entities.tags} key={id} />)}
+            {orderedArticleIds.map(id => <ArticleListItem articleId={id} key={id} />)}
         </>
     }
 }
