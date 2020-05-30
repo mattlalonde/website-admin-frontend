@@ -4,27 +4,45 @@ import { DialogContent, Dialog, DialogTitle, TextField, Button, CircularProgress
 import { useForm } from 'react-hook-form';
 import SaveIcon from '@material-ui/icons/Save';
 import { ICreateTagRequest } from '../apiRequests';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
+import { closeCreateTagPopup, createTagRequest } from '../tagSlice';
 
-interface ICreateTagPopupProps {
-    handleClose: () => void;
-    onSubmit: (content: ICreateTagRequest) => void;
-    isPopupOpen: boolean;
-    isCreating: boolean;
-}
+interface ICreateTagPopupProps {}
 
-export const CreateTagDialog: FunctionComponent<ICreateTagPopupProps> = ({handleClose, onSubmit, isPopupOpen, isCreating}) => {
+export const CreateTagDialog: FunctionComponent<ICreateTagPopupProps> = (props) => {
+
+    const dispatch = useDispatch();
+
+    const { isCreatePopupOpen, isCreating, createTagWithName, createTagAndAddToContentNamed } = useSelector(
+        (state: RootState) => state.tagsUi
+    );
+
+    const onCloseCreateTagPopup = () => {
+        dispatch(closeCreateTagPopup());
+    }
+
+    const onSubmitCreateTag = (content: ICreateTagRequest) => {
+        dispatch(createTagRequest(content));
+    }
     
     const { register, handleSubmit, errors } = useForm<ICreateTagRequest>();
+    let title = 'Create new tag';
+    if(createTagAndAddToContentNamed) {
+        title += ` and add to ${createTagAndAddToContentNamed}`;
+    }
+
+
 
     return (
         <Dialog 
-            open={isPopupOpen}
-            onClose={handleClose}
+            open={isCreatePopupOpen}
+            onClose={onCloseCreateTagPopup}
             fullWidth={true}
             maxWidth={'sm'}
             aria-labelledby='create-tag-dialog-title'>
-                <DialogTitle id='create-tag-dialog-title'>Create new tag</DialogTitle>
-                <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+                <DialogTitle id='create-tag-dialog-title'>{title}</DialogTitle>
+                <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmitCreateTag)}>
                     <DialogContent>
                         <Box my={2}>
                             <TextField 
@@ -34,7 +52,7 @@ export const CreateTagDialog: FunctionComponent<ICreateTagPopupProps> = ({handle
                                 name="name" 
                                 label="Name" 
                                 fullWidth={true} 
-                                defaultValue=''
+                                defaultValue={createTagWithName}
                                 variant='outlined'
                                 helperText={!!errors.name ? "Name is required" : ''}>
                             </TextField>
@@ -53,7 +71,7 @@ export const CreateTagDialog: FunctionComponent<ICreateTagPopupProps> = ({handle
                     </DialogContent>
                     <DialogActions>
                         <Button
-                            onClick={handleClose}
+                            onClick={onCloseCreateTagPopup}
                             color='secondary'
                             variant='contained'>
                                 Cancel

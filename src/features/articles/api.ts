@@ -1,4 +1,4 @@
-import { IArticle, IArticleListResponse, IArticleResponse } from './models';
+import { IArticleListResponse, IArticleResponse } from './models';
 import * as http from '../../utils/http';
 import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from './apiRequests';
 import { ApiError } from '../../errors/ApiError';

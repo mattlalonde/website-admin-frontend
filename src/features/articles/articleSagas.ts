@@ -9,6 +9,7 @@ import { watchCreateArticleSaga } from './sagas/createArticleSaga';
 import { watchLoadArticlesSaga } from './sagas/loadArticlesSaga';
 import { watchAddTagToArticleSaga } from './sagas/addArticleTagSaga';
 import { watchRemoveTagFromArticleSaga } from './sagas/removeArticleTagSaga';
+import { watchCreateTagAndAddToArticleSaga } from './sagas/createTagAndAddToArticleSaga';
 
 function* articleSagas() {
     yield all([
@@ -20,6 +21,7 @@ function* articleSagas() {
         fork(watchTakeArticleOfflineSaga),
         fork(watchAddTagToArticleSaga),
         fork(watchRemoveTagFromArticleSaga),
+        fork(watchCreateTagAndAddToArticleSaga),
 
         fork(watchCreateArticleSaga),
 

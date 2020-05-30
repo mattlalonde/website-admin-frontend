@@ -1,17 +1,16 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadTagsRequest, openCreateTagPopup, closeCreateTagPopup, createTagRequest } from '../tagSlice';
+import { loadTagsRequest, openCreateTagPopup } from '../tagSlice';
 import { RootState } from '../../../app/store';
 import { LinearProgress, Box, Button } from '@material-ui/core';
 import { TagList } from './TagList';
-import { ICreateTagRequest } from '../apiRequests';
 import { CreateTagDialog } from '../create/CreateTagDialog';
 
 export const TagListPage: FunctionComponent = () => {
 
     const dispatch = useDispatch();
-    const { listResult, listInitialised, isLoading, isCreatePopupOpen, isCreating } = useSelector(
+    const { listResult, listInitialised, isLoading } = useSelector(
         (state: RootState) => state.tagsUi
     );
 
@@ -23,14 +22,6 @@ export const TagListPage: FunctionComponent = () => {
 
     const onCreateTagClick = () => {
         dispatch(openCreateTagPopup());
-    }
-
-    const onCloseCreateTagPopup = () => {
-        dispatch(closeCreateTagPopup());
-    }
-
-    const onSubmitCreateTag = (content: ICreateTagRequest) => {
-        dispatch(createTagRequest(content));
     }
 
     return (
@@ -45,11 +36,7 @@ export const TagListPage: FunctionComponent = () => {
                         Create New Tag
                 </Button>
             </Box>
-            <CreateTagDialog
-                handleClose={onCloseCreateTagPopup}
-                onSubmit={onSubmitCreateTag}
-                isPopupOpen={isCreatePopupOpen}
-                isCreating={isCreating} />
+            <CreateTagDialog  />
             <TagList orderedTagIds={listResult} isLoading={isLoading} />
         </>
     )
