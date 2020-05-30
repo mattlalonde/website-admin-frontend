@@ -26,6 +26,12 @@ export interface IAddTagToArticleRequest extends IBaseArticleRequest {
     }
 }
 
+export interface ICreateTagAndAddToArticleRequest extends IBaseArticleRequest {
+    data: {
+        tagName: string;
+    }
+}
+
 export interface IRemoveTagFromArticleRequest extends IBaseArticleRequest {
     data: {
         tagId: string;

@@ -17,15 +17,24 @@ export const ArticleTags: FunctionComponent<IArticleTagsProps> = ({article, proc
     const dispatch = useDispatch();
 
     const onAddTag = (tagId: string) => {
-        if(article) {
-            dispatch(articleActions.addTagToArticleRequest({
-                id: article.id,
-                data: {
-                    tagId: tagId
-                }
-            }));
-        }
+        dispatch(articleActions.addTagToArticleRequest({
+            id: article.id,
+            data: {
+                tagId: tagId
+            }
+        }));
     }
+
+    const onCreateAndAddTag = (tagName: string) => {
+        dispatch(articleActions.createTagAndAddToArticleRequest({
+            id: article.id,
+            data: {
+                tagName: tagName
+            }
+        }));
+    }
+
+
 
     const currentTagIds = article.tags || [];
     const editable = article.state === 'DRAFT';
@@ -34,7 +43,7 @@ export const ArticleTags: FunctionComponent<IArticleTagsProps> = ({article, proc
         <>
             {editable && 
                 <>
-                    <AddTagToContent addTagFunc={onAddTag} isAdding={processingState === ArticleDetailsProcessingState.AddingTag} excludeIds={currentTagIds} />
+                    <AddTagToContent addTagFunc={onAddTag} createAndAddTagFunc={onCreateAndAddTag} isAdding={processingState === ArticleDetailsProcessingState.AddingTag} currentTagIds={currentTagIds} />
                     <hr />
                 </>
             }

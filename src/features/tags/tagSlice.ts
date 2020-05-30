@@ -9,6 +9,8 @@ export interface ITagState {
     isLoading: boolean;
     isCreating: boolean;
     isCreatePopupOpen: boolean;
+    createTagWithName: string | null;
+    createTagAndAddToContentNamed: string | null;
     tagDetailsProcessingState: TagDetailsProcessingState;
 }
 
@@ -18,6 +20,8 @@ const initialState: ITagState = {
     isLoading: false,
     isCreating: false,
     isCreatePopupOpen: false,
+    createTagWithName: null,
+    createTagAndAddToContentNamed: null,
     tagDetailsProcessingState: TagDetailsProcessingState.None
 };
 
@@ -36,11 +40,15 @@ const tags = createSlice({
         loadTagsFailed(state) {
             state.isLoading = false;
         },
-        openCreateTagPopup(state) {
+        openCreateTagPopup(state, action: PayloadAction<{ createTagName: string, contentName: string } | undefined>) {
             state.isCreatePopupOpen = true;
+            state.createTagWithName = action.payload?.createTagName || null;
+            state.createTagAndAddToContentNamed = action.payload?.contentName || null;
         },
         closeCreateTagPopup(state) {
             state.isCreatePopupOpen = false;
+            state.createTagWithName = null;
+            state.createTagAndAddToContentNamed =  null;
         },
         createTagRequest(state, action: PayloadAction<ICreateTagRequest>) {
             state.isCreating = true;

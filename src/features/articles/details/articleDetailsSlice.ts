@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticleResponse } from '../models';
-import { IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from '../apiRequests';
+import { IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest, ICreateTagAndAddToArticleRequest } from '../apiRequests';
 import { IApiErrorData } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 
@@ -13,7 +13,7 @@ const initialState: IArticleDetailsState = {
 };
 
 const articleDetails = createSlice({
-    name: 'articleDetails',
+    name: 'article/details',
     initialState,
     reducers: {
         loadArticleRequest(state, action: PayloadAction<string>) {
@@ -45,6 +45,12 @@ const articleDetails = createSlice({
         },
         articleDetailsActionFailed(state, action: PayloadAction<IApiErrorData>) {
             state.processingState = ArticleDetailsProcessingState.None;
+        },
+        createTagAndAddToArticleRequest(state, action: PayloadAction<ICreateTagAndAddToArticleRequest>) {
+            state.processingState = ArticleDetailsProcessingState.AddingTag;
+        },
+        createTagAndAddToArticleFailed(state) {
+            state.processingState = ArticleDetailsProcessingState.None;
         }
     }
 });
@@ -59,7 +65,9 @@ export const {
     addTagToArticleRequest,
     removeTagFromArticleRequest,
     articleDetailsActionSuccess,
-    articleDetailsActionFailed
+    articleDetailsActionFailed,
+    createTagAndAddToArticleRequest,
+    createTagAndAddToArticleFailed
 } = articleDetails.actions;
 
 export default articleDetails.reducer;
