@@ -74,6 +74,7 @@
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-redux": "^7.1.7",
+    "@types/react-router-dom": "^5.1.5",
     "react-docgen-typescript-loader": "^3.6.0",
     "redux-saga-test-plan": "^4.0.0-rc.3",
     "sinon": "^9.0.0",

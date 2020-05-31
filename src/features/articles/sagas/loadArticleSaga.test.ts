@@ -4,7 +4,7 @@ import { watchLoadArticleSaga } from './loadArticleSaga';
 import { loadArticle } from '../api';
 import draftArticle from '../__mockData__/draftArticle.json';
 import { throwError } from 'redux-saga-test-plan/providers';
-import { IArticle } from '../models';
+import { IArticle, IArticleResponse } from '../models';
 import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import createRootReducer from '../../../app/rootReducer'; 
@@ -36,12 +36,18 @@ describe('load article saga', () => {
     });
 
     it('calls the api and updates the store', () => {
+
+        const articleResponse: IArticleResponse = {
+            article: draftArticle as IArticle,
+            tags: {}
+        }
+
         return expectSaga(watchLoadArticleSaga)
                 .withReducer(createRootReducer())
                 .provide([
-                    [matchers.call.fn(loadArticle), draftArticle]
+                    [matchers.call.fn(loadArticle), articleResponse]
                 ])
-                .put(articleActions.articleDetailsActionSuccess(draftArticle as IArticle))
+                .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.loadArticleRequest('test'))
                 .silentRun()
                 .then(result => {
@@ -67,15 +73,19 @@ describe('load article saga', () => {
             body: 'new body'
         };
 
-        const updatedArticle = { ...draftArticle , ...newValues };
+        const updatedArticle = { ...draftArticle , ...newValues } as IArticle;
+        const articleResponse: IArticleResponse = {
+            article: updatedArticle,
+            tags: {}
+        }
 
         return expectSaga(watchLoadArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(loadArticle), updatedArticle]
+                    [matchers.call.fn(loadArticle), articleResponse]
                 ])
-                .put(articleActions.articleDetailsActionSuccess(updatedArticle as IArticle))
+                .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.loadArticleRequest('test'))
                 .silentRun()
                 .then(result => {

@@ -9,8 +9,10 @@ import { createStoreWithState } from '../../../testUtils/store';
 
 const state = Object.assign(initialStoreState, {
     entities: listData.entities,
-    tagsUi: {
-        listResult: listData.result
+    articlesUi: {
+        list: {
+            listResult: listData.result
+        }
     }
 });
 

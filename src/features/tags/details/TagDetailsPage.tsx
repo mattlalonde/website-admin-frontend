@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { RootState } from '../../../app/store';
 import { TagDetailsProcessingState } from './TagDetailsProcessingState';
-import { loadTagRequest } from '../tagSlice';
+import tagActions from '../tagActions';
 import { TagDetailsForm } from './TagDetailsForm';
 import { LinearProgress } from '@material-ui/core';
 
@@ -14,14 +14,14 @@ export const TagDetailsPage: FunctionComponent<ITagDetailsPageProps> = (props) =
 
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { tagDetailsProcessingState } = useSelector( (state: RootState) => state.tagsUi );
+    const { tagDetailsProcessingState } = useSelector( (state: RootState) => state.tagsUi.details );
     const tag = useSelector((state: RootState) => state.entities.tags[id]);
 
     const isProcessing = tagDetailsProcessingState !== TagDetailsProcessingState.None;
 
     useEffect(() => {
         if(!tag) {
-            dispatch(loadTagRequest(id));
+            dispatch(tagActions.loadTagRequest(id));
         }
     }, [dispatch, id, tag]);
 

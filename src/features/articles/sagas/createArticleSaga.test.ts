@@ -11,7 +11,7 @@ import initialStoreState from '../../../app/initialStoreStateTesting';
 
 import createdArticle from '../__mockData__/createdArticle.json';
 import articleList from '../__mockData__/list.json';
-import { IArticle } from '../models';
+import { IArticle, IArticleResponse } from '../models';
 import { ApiError } from '../../../errors/ApiError';
 import { RootState } from '../../../app/store';
 
@@ -56,13 +56,18 @@ describe('create article saga', () => {
                 }
             }
         });
+
+        const articleResponse: IArticleResponse = {
+            article: newArticle,
+            tags: {}
+        };
         
         return expectSaga(watchCreateArticleSaga)
                 .withReducer(createRootReducer(), storeState)
                 .provide([
-                    [matchers.call.fn(createArticle), newArticle]
+                    [matchers.call.fn(createArticle), articleResponse]
                 ])
-                .put(articleActions.createArticleSuccess(newArticle))
+                .put(articleActions.createArticleSuccess(articleResponse))
                 .put(articleActions.closeCreateArticlePopup())
                 .put(push(`/article-details/${createdArticle.id}`))
                 .dispatch(articleActions.createArticleRequest({ title: 'new article title'}))

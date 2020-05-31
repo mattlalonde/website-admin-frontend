@@ -4,7 +4,7 @@ import { watchUpdateArticleContentSaga } from './updateArticleContentSaga';
 import { updateArticleContent } from '../api';
 import draftArticle from '../__mockData__/draftArticle.json';
 import { throwError } from 'redux-saga-test-plan/providers';
-import { IArticle } from '../models';
+import { IArticle, IArticleResponse } from '../models';
 import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import createRootReducer from '../../../app/rootReducer'; 
@@ -68,16 +68,20 @@ describe('update article content saga', () => {
             body: 'new body'
         };
 
-        const updatedArticle = { ...draftArticle , ...newValues };
+        const updatedArticle = { ...draftArticle , ...newValues } as IArticle;
+        const articleResponse: IArticleResponse = {
+            article: updatedArticle,
+            tags: {}
+        }
 
 
         return expectSaga(watchUpdateArticleContentSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(updateArticleContent), updatedArticle]
+                    [matchers.call.fn(updateArticleContent), articleResponse]
                 ])
-                .put(articleActions.articleDetailsActionSuccess(updatedArticle as IArticle))
+                .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.updateArticleContentRequest({ id: draftArticle.id, data: newValues }))
                 .silentRun()
                 .then(result => {

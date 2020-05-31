@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { removeTagFromArticleRequest } from '../details/articleDetailsSlice';
-import { loadTagRequest } from '../../tags/tagSlice';
+import tagActions from '../../tags/tagActions';
 import { Chip } from '@material-ui/core';
 
 interface IArticleTagProps {
@@ -26,7 +26,7 @@ export const ArticleTag: FunctionComponent<IArticleTagProps> = ({articleId, tagI
 
     useEffect(() => {
         if(!tag){
-            dispatch(loadTagRequest(tagId));
+            dispatch(tagActions.loadTagRequest(tagId));
         }
     }, [dispatch, tagId, tag]);
 

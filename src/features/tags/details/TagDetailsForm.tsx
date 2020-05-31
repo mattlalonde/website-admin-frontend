@@ -6,7 +6,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { ITag } from '../models';
 import { TagDetailsProcessingState } from './TagDetailsProcessingState';
 import { useDispatch } from 'react-redux';
-import { updateTagRequest } from '../tagSlice';
+import tagActions from '../tagActions';
 import { TagDetailsLoading } from './TagDetailsLoading';
 
 interface ITagDetailsFormValues {
@@ -27,7 +27,7 @@ export const TagDetailsForm: FunctionComponent<ITagDetailsFormProps> = ({ tag, p
     const isProcessing = processingState !== TagDetailsProcessingState.None;
 
     const onUpdate = handleSubmit(content => {
-        dispatch(updateTagRequest({
+        dispatch(tagActions.updateTagRequest({
             id: content.id,
             data: {
                 name: content.name,

@@ -10,7 +10,9 @@ import { Provider } from 'react-redux';
 const state = Object.assign(initialStoreState, {
     entities: articleListData.entities,
     tagsUi: {
-        listResult: articleListData.result
+        list: {
+            listResult: articleListData.result
+        }
     }
 });
 

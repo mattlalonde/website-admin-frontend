@@ -7,10 +7,13 @@ import publishedArticle from '../__mockData__/publishedArticle.json';
 import { IArticle } from '../models';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 import { addDays } from 'date-fns';
+import { createStoreWithState } from '../../../testUtils/store';
+import { Provider } from 'react-redux';
 
 export default {
     component: ArticlePublishingForm,
-    title: 'Article Publishing Form'
+    title: 'Article Publishing Form',
+    decorators: [story => <Provider store={createStoreWithState({})}>{story()}</Provider>]
 }
 
 export const NotPublished = () => {

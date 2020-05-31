@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ITag, ITagListResponse } from '../features/tags/models';
-import { loadTagsSuccess, createTagSuccess, loadTagSuccess, updateTagSuccess } from '../features/tags/tagSlice';
 import { IArticle, IArticleListResponse, IArticleResponse } from '../features/articles/models';
 import articleActions from '../features/articles/articleActions';
+import tagActions from '../features/tags/tagActions';
 
 export interface IEntitiesState {
     tags: Record<string, ITag>;
@@ -19,20 +19,20 @@ const entities = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
-        [loadTagsSuccess.type]: (state, action: PayloadAction<ITagListResponse>) => {
+        [tagActions.loadTagsSuccess.type]: (state, action: PayloadAction<ITagListResponse>) => {
             state.tags = Object.assign(state.tags, action.payload.entities.tags);
         },
-        [createTagSuccess.type]: (state, action: PayloadAction<ITag>) => {
+        [tagActions.createTagSuccess.type]: (state, action: PayloadAction<ITag>) => {
             state.tags[action.payload.id] = action.payload;
         },
-        [loadTagSuccess.type]: (state, action: PayloadAction<ITag>) => {
+        [tagActions.loadTagSuccess.type]: (state, action: PayloadAction<ITag>) => {
             state.tags[action.payload.id] = Object.assign({}, state.tags[action.payload.id], action.payload);
         },
-        [updateTagSuccess.type]: (state, action: PayloadAction<ITag>) => {
+        [tagActions.updateTagSuccess.type]: (state, action: PayloadAction<ITag>) => {
             state.tags[action.payload.id] = Object.assign({}, state.tags[action.payload.id], action.payload);
         },
-        [articleActions.createArticleSuccess.type]: (state, action: PayloadAction<IArticle>) => {
-            state.articles[action.payload.id] = action.payload;
+        [articleActions.createArticleSuccess.type]: (state, action: PayloadAction<IArticleResponse>) => {
+            state.articles[action.payload.article.id] = action.payload.article;
         },
         [articleActions.loadArticlesSuccess.type]: (state, action: PayloadAction<IArticleListResponse>) => {
             state.articles = Object.assign(state.articles, action.payload.entities.articles);

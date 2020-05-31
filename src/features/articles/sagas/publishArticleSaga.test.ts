@@ -4,7 +4,7 @@ import { watchPublishArticleSaga } from './publishArticleSaga';
 import { publishArticle } from '../api';
 import draftArticle from '../__mockData__/draftArticle.json';
 import { throwError } from 'redux-saga-test-plan/providers';
-import { IArticle } from '../models';
+import { IArticle, IArticleResponse } from '../models';
 import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import createRootReducer from '../../../app/rootReducer'; 
@@ -47,6 +47,7 @@ describe('publish article saga', () => {
                 });
     });
 
+
     it('publish article success should call api and set article with new state', () => {
         const initialState = Object.assign(initialStoreState, {
             entities: {
@@ -62,16 +63,20 @@ describe('publish article saga', () => {
             publicationDate: publicationDate
         };
 
-        const updatedArticle = { ...draftArticle , ...newValues };
+        const updatedArticle = { ...draftArticle , ...newValues } as IArticle;
+        const articleResponse: IArticleResponse = {
+            article: updatedArticle,
+            tags: {}
+        }
 
 
         return expectSaga(watchPublishArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(publishArticle), updatedArticle]
+                    [matchers.call.fn(publishArticle), articleResponse]
                 ])
-                .put(articleActions.articleDetailsActionSuccess(updatedArticle as IArticle))
+                .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.publishArticleRequest({ id: draftArticle.id, data: { publicationDate: publicationDate } }))
                 .silentRun()
                 .then(result => {

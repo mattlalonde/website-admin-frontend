@@ -6,8 +6,7 @@ import entitiesReducer from '../entities/entitiesSlice';
 import errorReducer from '../features/errors/errorsSlice';
 
 import articleUiRducer from '../features/articles/articleUiReducer';
-
-import tagsReducer from '../features/tags/tagSlice';
+import tagUiReducer from '../features/tags/tagUiReducer';
 
 
 const createRootReducer = (history?: History) => {
@@ -16,7 +15,7 @@ const createRootReducer = (history?: History) => {
         entities: entitiesReducer,
         errors: errorReducer,
         articlesUi: articleUiRducer,
-        tagsUi: tagsReducer
+        tagsUi: tagUiReducer
     };
 
     if(history) {

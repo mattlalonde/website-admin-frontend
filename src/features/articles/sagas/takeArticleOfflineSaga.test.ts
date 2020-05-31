@@ -4,7 +4,7 @@ import { watchTakeArticleOfflineSaga } from './takeArticleOfflineSaga';
 import { takeArticleOffline } from '../api';
 import publishedArticle from '../__mockData__/publishedArticle.json';
 import { throwError } from 'redux-saga-test-plan/providers';
-import { IArticle } from '../models';
+import { IArticle, IArticleResponse } from '../models';
 import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import createRootReducer from '../../../app/rootReducer'; 
@@ -60,16 +60,20 @@ describe('take article offline saga', () => {
             publicationDate: null
         };
 
-        const updatedArticle = { ...publishedArticle , ...newValues };
+        const updatedArticle = { ...publishedArticle , ...newValues } as IArticle;
+        const articleResponse: IArticleResponse = {
+            article: updatedArticle,
+            tags: {}
+        }
 
 
         return expectSaga(watchTakeArticleOfflineSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(takeArticleOffline), updatedArticle]
+                    [matchers.call.fn(takeArticleOffline), articleResponse]
                 ])
-                .put(articleActions.articleDetailsActionSuccess(updatedArticle as IArticle))
+                .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.takeArticleOfflineRequest({ id: publishedArticle.id }))
                 .silentRun()
                 .then(result => {
