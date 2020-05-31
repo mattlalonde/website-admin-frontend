@@ -16,7 +16,7 @@ const initialState: IArticleCreateState = {
 };
 
 const articleCreateSlice = createSlice({
-    name: 'articleCreate',
+    name: 'article/create',
     initialState,
     reducers: {
         openCreateArticlePopup(state) {

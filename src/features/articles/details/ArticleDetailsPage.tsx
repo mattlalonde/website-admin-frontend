@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState, ChangeEvent } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import { RootState } from '../../../app/store';
@@ -12,9 +12,6 @@ import { ArticleStateType, IArticle } from '../models';
 import { ArticlePublishingForm } from './ArticlePublishingForm';
 import { ArticleTags } from './ArticleTags';
 import articleActions from '../articleActions';
-
-interface IArticleDetailsPageProps {
-}
 
 enum ArticleTabView {
     Details = 0,
@@ -46,9 +43,9 @@ const getChipText = (article: IArticle | null) => {
 }
 
 
-export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (props: IArticleDetailsPageProps) => {
+export const ArticleDetailsPage: FunctionComponent<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
-    const { id } = useParams();
+    const id = match.params.id;
 
     const [selectedTab, setSelectedTab] = useState(ArticleTabView.Details);
 

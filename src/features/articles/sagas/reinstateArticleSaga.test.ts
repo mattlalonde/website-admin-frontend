@@ -4,7 +4,7 @@ import { watchReinstateArticleSaga } from './reinstateArticleSaga';
 import { reinstateArticle } from '../api';
 import deletedArticle from '../__mockData__/deletedArticle.json';
 import { throwError } from 'redux-saga-test-plan/providers';
-import { IArticle } from '../models';
+import { IArticle, IArticleResponse } from '../models';
 import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import createRootReducer from '../../../app/rootReducer'; 
@@ -61,16 +61,20 @@ describe('reinstate article saga', () => {
             state: 'DRAFT'
         };
 
-        const updatedArticle = { ...deletedArticle , ...newValues };
+        const updatedArticle = { ...deletedArticle , ...newValues }as IArticle;
+        const articleResponse: IArticleResponse = {
+            article: updatedArticle,
+            tags: {}
+        }
 
 
         return expectSaga(watchReinstateArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(reinstateArticle), updatedArticle]
+                    [matchers.call.fn(reinstateArticle), articleResponse]
                 ])
-                .put(articleActions.articleDetailsActionSuccess(updatedArticle as IArticle))
+                .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.reinstateArticleRequest({ id: deletedArticle.id }))
                 .silentRun()
                 .then(result => {

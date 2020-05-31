@@ -6,7 +6,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { ICreateTagRequest } from '../apiRequests';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
-import { closeCreateTagPopup, createTagRequest } from '../tagSlice';
+import tagActions from '../tagActions';
 
 interface ICreateTagPopupProps {}
 
@@ -15,15 +15,15 @@ export const CreateTagDialog: FunctionComponent<ICreateTagPopupProps> = (props) 
     const dispatch = useDispatch();
 
     const { isCreatePopupOpen, isCreating, createTagWithName, createTagAndAddToContentNamed } = useSelector(
-        (state: RootState) => state.tagsUi
+        (state: RootState) => state.tagsUi.create
     );
 
     const onCloseCreateTagPopup = () => {
-        dispatch(closeCreateTagPopup());
+        dispatch(tagActions.closeCreateTagPopup());
     }
 
     const onSubmitCreateTag = (content: ICreateTagRequest) => {
-        dispatch(createTagRequest(content));
+        dispatch(tagActions.createTagRequest(content));
     }
     
     const { register, handleSubmit, errors } = useForm<ICreateTagRequest>();

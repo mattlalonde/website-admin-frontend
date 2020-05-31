@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IArticle, IArticleListResponse } from '../models';
+import { IArticle, IArticleListResponse, IArticleResponse } from '../models';
 import { createArticleSuccess } from '../create/articleCreateSlice';
 
 export interface IArticleListState {
@@ -13,7 +13,7 @@ const initialState: IArticleListState = {
 };
 
 const articleList = createSlice({
-    name: 'articleList',
+    name: 'article/list',
     initialState,
     reducers: {
         loadArticlesRequest(state) {
@@ -28,8 +28,8 @@ const articleList = createSlice({
         }
     },
     extraReducers: {
-        [createArticleSuccess.type]: (state, action: PayloadAction<IArticle>) => {
-            state.result.unshift(action.payload.id);
+        [createArticleSuccess.type]: (state, action: PayloadAction<IArticleResponse>) => {
+            state.result.unshift(action.payload.article.id);
         }
     }
 });

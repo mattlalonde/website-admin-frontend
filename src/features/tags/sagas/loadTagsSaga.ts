@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 
-import * as actions from '../tagSlice';
+import tagActions from '../tagActions';
 import * as errors from '../../errors/errorsSlice';
 import { loadTags } from '../api';
 import { ITagListResponse } from '../models';
@@ -8,14 +8,14 @@ import { ITagListResponse } from '../models';
 function* loadTagsSaga() {
     try { 
         const data: ITagListResponse = yield call(loadTags);
-        yield put(actions.loadTagsSuccess(data));
+        yield put(tagActions.loadTagsSuccess(data));
     }
     catch(error) {
-        yield put(actions.loadTagsFailed())
+        yield put(tagActions.loadTagsFailed())
         yield put(errors.setError(error.apiErrorData));
     }
 }
 
 export function* watchLoadTagsSaga() {
-    yield takeLatest(actions.loadTagsRequest, loadTagsSaga);
+    yield takeLatest(tagActions.loadTagsRequest, loadTagsSaga);
 }

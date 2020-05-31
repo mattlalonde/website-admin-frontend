@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 
-import * as tagActions from '../tagSlice';
+import tagActions from '../tagActions';
 import * as errors from '../../errors/errorsSlice';
 import { createTag } from '../api';
 
