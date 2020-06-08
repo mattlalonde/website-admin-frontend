@@ -5,7 +5,7 @@ import { History } from 'history';
 import entitiesReducer from '../entities/entitiesSlice';
 import errorReducer from '../features/errors/errorsSlice';
 
-import articleUiRducer from '../features/articles/articleUiReducer';
+import articleUiReducer from '../features/articles/articleUiReducer';
 import tagUiReducer from '../features/tags/tagUiReducer';
 
 
@@ -14,7 +14,7 @@ const createRootReducer = (history?: History) => {
     let reducers = {
         entities: entitiesReducer,
         errors: errorReducer,
-        articlesUi: articleUiRducer,
+        articlesUi: articleUiReducer,
         tagsUi: tagUiReducer
     };
 

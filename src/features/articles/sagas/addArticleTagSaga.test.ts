@@ -1,96 +1,102 @@
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { watchLoadArticleSaga } from './loadArticleSaga';
-import { loadArticle } from '../api';
-import draftArticle from '../__mockData__/draftArticle.json';
-import { throwError } from 'redux-saga-test-plan/providers';
-import { IArticle, IArticleResponse } from '../models';
-import { ApiError } from '../../../errors/ApiError';
+import { watchAddTagToArticleSaga } from './addArticleTagSaga';
+import { addTagToArticle } from '../api';
 import createRootReducer from '../../../app/rootReducer'; 
 import articleActions from '../articleActions';
 import * as errors from '../../errors/errorsSlice';
 import { RootState } from '../../../app/store';
 import initialStoreState from '../../../app/initialStoreStateTesting';
+import { ApiError } from '../../../errors/ApiError';
+import { throwError } from 'redux-saga-test-plan/providers';
+import draftArticle from '../__mockData__/draftArticle.json';
+import tag from '../__mockData__/tag.json';
+import { IArticle, IArticleResponse } from '../models';
+import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 
-describe('load article saga', () => {
+describe('add article tag saga', () => {
+
     it('puts failed action on error and updates store', () => {
         const error = ApiError.create('test error', 'something went wrong');
-
-        return expectSaga(watchLoadArticleSaga)
-                .withReducer(createRootReducer())
-                .provide([
-                    [matchers.call.fn(loadArticle), throwError(error)]
-                ])
-                .put(articleActions.articleDetailsActionFailed(error.apiErrorData))
-                .put(errors.setError(error.apiErrorData))
-                .dispatch(articleActions.loadArticleRequest('test'))
-                .silentRun()
-                .then(result => {
-                    const store: RootState = result.storeState;
-
-                    expect(store.entities.articles).toEqual({});
-                    expect(store.errors.isErrorPopupOpen).toEqual(true);
-                    expect(store.errors.error).toEqual(error.apiErrorData);
-                });
-    });
-
-    it('calls the api and updates the store', () => {
-
-        const articleResponse: IArticleResponse = {
-            article: draftArticle as IArticle,
-            tags: {}
-        }
-
-        return expectSaga(watchLoadArticleSaga)
-                .withReducer(createRootReducer())
-                .provide([
-                    [matchers.call.fn(loadArticle), articleResponse]
-                ])
-                .put(articleActions.articleDetailsActionSuccess(articleResponse))
-                .dispatch(articleActions.loadArticleRequest('test'))
-                .silentRun()
-                .then(result => {
-                    const store: RootState = result.storeState;
-
-                    expect(store.entities.articles[draftArticle.id]).toEqual(draftArticle);
-                });
-    });
-
-    it('calls the store and overwrites any existing values', () => {
 
         const initialState = Object.assign(initialStoreState, {
             entities: {
                 articles: {
                     [draftArticle.id]: draftArticle
+                },
+                tags: {
+                    [tag.id]: tag
+                }
+            }
+        });
+
+        return expectSaga(watchAddTagToArticleSaga)
+                .withReducer(createRootReducer())
+                .withState(initialState)
+                .provide([
+                    [matchers.call.fn(addTagToArticle), throwError(error)]
+                ])
+                .put(articleActions.articleDetailsActionFailed(error.apiErrorData))
+                .put(errors.setError(error.apiErrorData))
+                .dispatch(articleActions.addTagToArticleRequest({
+                    id: draftArticle.id,
+                    data: {
+                        tagId: tag.id
+                    }
+                }))
+                .silentRun()
+                .then(result => {
+                    const store: RootState = result.storeState;
+
+                    expect(store.entities.articles[draftArticle.id]).toEqual(draftArticle);
+                    expect(store.errors.isErrorPopupOpen).toEqual(true);
+                    expect(store.errors.error).toEqual(error.apiErrorData);
+                });
+    });
+
+    it('adds tag to article', () => {
+        const initialState = Object.assign(initialStoreState, {
+            entities: {
+                articles: {
+                    [draftArticle.id]: draftArticle
+                },
+                tags: {
+                    [tag.id]: tag
                 }
             }
         });
 
         const newValues = {
-            title: 'new title',
-            precis: 'new prcis',
-            body: 'new body'
+            tags: [tag.id]
         };
 
         const updatedArticle = { ...draftArticle , ...newValues } as IArticle;
         const articleResponse: IArticleResponse = {
             article: updatedArticle,
-            tags: {}
+            tags: {
+                [tag.id]: tag
+            }
         }
 
-        return expectSaga(watchLoadArticleSaga)
+        return expectSaga(watchAddTagToArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(loadArticle), articleResponse]
+                    [matchers.call.fn(addTagToArticle), articleResponse]
                 ])
                 .put(articleActions.articleDetailsActionSuccess(articleResponse))
-                .dispatch(articleActions.loadArticleRequest('test'))
+                .dispatch(articleActions.addTagToArticleRequest({
+                    id: draftArticle.id,
+                    data: {
+                        tagId: tag.id
+                    }
+                }))
                 .silentRun()
                 .then(result => {
                     const store: RootState = result.storeState;
 
                     expect(store.entities.articles[draftArticle.id]).toEqual(updatedArticle);
+                    expect(store.articlesUi.details.processingState).toEqual(ArticleDetailsProcessingState.None);
                 });
-    });
+    })
 });
