@@ -1,14 +1,18 @@
 import React, { FunctionComponent } from 'react';
-import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../app/store';
+import { LoggedInState } from '../../features/authorization/login/LoggedInState';
+import userActions from '../../features/authorization/userActions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
+      flexGrow: 1
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(2)
     },
     title: {
       flexGrow: 1,
@@ -32,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const NavBar: FunctionComponent = () => {
 
     const classes = useStyles();
+    const { loggedInState } = useSelector((state: RootState) => state.authorization.login);
+    const dispatch = useDispatch();
+    
 
     return (
         <div className={classes.root}>
@@ -52,6 +59,7 @@ export const NavBar: FunctionComponent = () => {
                             Tags
                         </Typography>
                     </NavLink>
+                    {loggedInState === LoggedInState.LoggedIn && <Button color="inherit" onClick={() => dispatch(userActions.logoutRequest())}>Logout</Button> }
                 </Toolbar>
             </AppBar>
         </div>

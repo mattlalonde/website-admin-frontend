@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IArticle, IArticleListResponse, IArticleResponse } from '../models';
+import { IArticleListResponse, IArticleResponse } from '../models';
 import { createArticleSuccess } from '../create/articleCreateSlice';
 
 export interface IArticleListState {
