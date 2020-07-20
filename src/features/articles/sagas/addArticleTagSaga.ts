@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 
-import * as actions from '../details/articleDetailsSlice';
+import actions from '../articleActions';
 import * as errors from '../../errors/errorsSlice';
 
 import { addTagToArticle } from '../api';

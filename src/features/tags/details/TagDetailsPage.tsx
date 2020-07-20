@@ -14,7 +14,7 @@ export const TagDetailsPage: FunctionComponent<ITagDetailsPageProps> = (props) =
 
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { tagDetailsProcessingState } = useSelector( (state: RootState) => state.tagsUi.details );
+    const { tagDetailsProcessingState } = useSelector((state: RootState) => state.tagsUi.details);
     const tag = useSelector((state: RootState) => state.entities.tags[id]);
 
     const isProcessing = tagDetailsProcessingState !== TagDetailsProcessingState.None;

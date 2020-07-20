@@ -28,7 +28,12 @@ const processError = (error: ISpringError | IApiErrorData): IApiErrorData => {
   }
 }
 
+let accessToken: string | null = null;
+
 async function http<T>(request: RequestInfo): Promise<HttpResponse<T>> {
+
+    
+
     const response: HttpResponse<T> = await fetch(request);
   
     if (!response.ok) {
@@ -44,11 +49,26 @@ async function http<T>(request: RequestInfo): Promise<HttpResponse<T>> {
     return response;
   }
 
+  export const setAccessToken = (token: string) => {
+    accessToken = token;
+  }
+
+  const setAuthorisationHeader = (args: RequestInit) => {
+    args.headers = args.headers || {};
+    args.headers['Authorization'] = `Bearer ${accessToken}`;
+
+    return args;
+  }
+
+  export const removeAuthorizationToken = () => {
+    accessToken = null;
+  }
+
   export async function get<T>(
     path: string,
     args: RequestInit = { method: "get" }
   ): Promise<HttpResponse<T>> {
-    return await http<T>(new Request(path, args));
+    return await http<T>(new Request(path, setAuthorisationHeader(args)));
   };
   
   export async function post<T>(
@@ -56,7 +76,7 @@ async function http<T>(request: RequestInfo): Promise<HttpResponse<T>> {
     body: any,
     args: RequestInit = { method: "post", body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }
   ): Promise<HttpResponse<T>>  {
-    return await http<T>(new Request(path, args));
+    return await http<T>(new Request(path, setAuthorisationHeader(args)));
   };
   
   export async function put<T>(
@@ -64,12 +84,12 @@ async function http<T>(request: RequestInfo): Promise<HttpResponse<T>> {
     body: any = {},
     args: RequestInit = { method: "put", body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }
   ): Promise<HttpResponse<T>> {
-    return await http<T>(new Request(path, args));
+    return await http<T>(new Request(path, setAuthorisationHeader(args)));
   };
 
   export async function del<T>(
     path: string,
     args: RequestInit =  { method: "delete" } 
   ) : Promise<HttpResponse<T>> {
-    return await http<T>(new Request(path, args));
+    return await http<T>(new Request(path, setAuthorisationHeader(args)));
   }

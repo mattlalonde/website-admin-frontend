@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState, ChangeEvent } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 
@@ -42,10 +42,12 @@ const getChipText = (article: IArticle | null) => {
     }
 }
 
+interface IArticleDetailsPageProps {}
 
-export const ArticleDetailsPage: FunctionComponent<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
-    const id = match.params.id;
+export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (props) => {
+
+    const { id } = useParams();
 
     const [selectedTab, setSelectedTab] = useState(ArticleTabView.Details);
 
