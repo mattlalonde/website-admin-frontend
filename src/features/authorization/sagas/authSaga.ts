@@ -80,7 +80,6 @@ function* refreshAccessTokenLoop() {
 
         if(failedAttempts > maxFailedAttempts) {
             // this shouldn't happen unless the server is down but if it is we don't want to fire loads of requests so bail out
-            yield call(logout);
             return;
         }
     }
@@ -102,15 +101,13 @@ function* authSaga(action) {
             }
         }
 
-        // race between refresh loop and logout
-        const { signOutAction } = yield race({
+        // wait for logout or the refresh loop to bail out
+        yield race({
             signOutAction: take(actions.logoutRequest),
             refreshTokenLoop: call(refreshAccessTokenLoop)
         });
     
-        if(signOutAction) {
-            yield call(logout);
-        }
+        yield call(logout);
     }
 
 }
