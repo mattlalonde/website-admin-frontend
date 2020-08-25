@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  admin-client:
+    container_name: website-admin-client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app:cached'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    networks:
+        - frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+networks:
+  frontend:
