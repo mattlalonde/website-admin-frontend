@@ -5,13 +5,12 @@ import { ITag } from '../models';
 import { TagDetailsProcessingState } from './TagDetailsProcessingState';
 
 import tag from '../__mockData__/tag.json';
-import { Provider } from 'react-redux';
-import { createStoreWithState } from '../../../testUtils/store';
+import { createTestUiWithProviders } from '../../../testUtils/store';
 
 export default {
     component: TagDetailsForm,
     title: 'Tag Details Form',
-    decorators: [story => <Provider store={createStoreWithState({})}>{story()}</Provider>]
+    decorators: [story => createTestUiWithProviders(story())]
 }
 
 export const Loading = () => {

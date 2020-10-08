@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../app/store';
 import { LoggedInState } from '../../features/authorization/login/LoggedInState';
 import userActions from '../../features/authorization/userActions';
+import { articleListLink } from '../../features/articles/articleLinks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,7 +50,7 @@ export const NavBar: FunctionComponent = () => {
                             Home
                         </Typography>
                     </NavLink>
-                    <NavLink to="/articles" className={classes.link} activeClassName={classes.activeLink}>
+                    <NavLink to={articleListLink()} className={classes.link} activeClassName={classes.activeLink}>
                         <Typography variant="h6" className={classes.title}>
                             Articles
                         </Typography>

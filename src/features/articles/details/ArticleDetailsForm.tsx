@@ -34,7 +34,7 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
     useEffect(() => {
         register({ name: "body"});
         return () => unregister("body");
-    }, [register, unregister])
+    }, [register, unregister]);
 
     const onUpdate = handleSubmit(content => {
         dispatch(articleActions.updateArticleContentRequest({
@@ -121,7 +121,7 @@ export const ArticleDetailsForm: FunctionComponent<IArticleDetailsFormProps> = (
                     }}
                     onChange={ ( event: any, editor: any ) => {
                         setValue("body", editor.getData());
-                    } }
+                    }}
                 />
             </Box>
             <Box my={2}>

@@ -11,6 +11,8 @@ import { RootState } from './store';
 import { LoggedInState } from '../features/authorization/login/LoggedInState';
 import { useSelector } from 'react-redux';
 
+import { articleListLinkTemplate, articleDetailsLinkTemplate } from '../features/articles/articleLinks';
+
 interface PrivateRouteProps extends RouteProps {
     authed: boolean;
 }
@@ -37,10 +39,10 @@ const Routes: FunctionComponent = () => {
                 <PrivateRoute exact path="/" authed={authed}>
                     <HomePage />
                 </PrivateRoute>
-                <PrivateRoute path="/articles" authed={authed}>
+                <PrivateRoute path={articleListLinkTemplate} authed={authed}>
                     <ArticleListPage />
                 </PrivateRoute>
-                <PrivateRoute path="/article-details/:id" authed={authed}>
+                <PrivateRoute path={articleDetailsLinkTemplate} authed={authed}>
                     <ArticleDetailsPage /> 
                 </PrivateRoute>
 

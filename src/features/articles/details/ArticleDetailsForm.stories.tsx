@@ -6,13 +6,12 @@ import deletedArticle from '../__mockData__/deletedArticle.json';
 import publishedArticle from '../__mockData__/publishedArticle.json';
 import { IArticle } from '../models';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
-import { createStoreWithState } from '../../../testUtils/store';
-import { Provider } from 'react-redux';
+import { createTestUiWithProviders } from '../../../testUtils/store';
 
 export default {
     component: ArticleDetailsForm,
     title: 'Article Details Form',
-    decorators: [story => <Provider store={createStoreWithState({})}>{story()}</Provider>]
+    decorators: [story => createTestUiWithProviders(story())]
 }
 
 export const Loading = () => {

@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useEffect } from 'react';
-import { useForm } from "react-hook-form";
+import React, { FunctionComponent } from 'react';
+import { Controller, useForm } from "react-hook-form";
 import { IArticle } from '../models';
 import { useDispatch } from 'react-redux';
-import { publishArticleRequest, takeArticleOfflineRequest } from './articleDetailsSlice';
+import articleActions from '../articleActions';
 
 import { Box, Button, CircularProgress } from '@material-ui/core';
 import { KeyboardDateTimePicker } from '@material-ui/pickers';
@@ -41,17 +41,12 @@ export const ArticlePublishingForm: FunctionComponent<IArticlePublishingFormProp
     const defaultValues = {
         publicationDate: article.publicationDate ? new Date(article.publicationDate) : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
     }
-    const { register, unregister, setValue, handleSubmit, errors, getValues } = useForm<IArticlePublishingFormValues>({defaultValues});
+    const { handleSubmit, errors, control } = useForm<IArticlePublishingFormValues>({defaultValues});
     const isProcessing = processingState !== ArticleDetailsProcessingState.None;
-
-    useEffect(() => {
-        register({ name: "publicationDate"}, { required: true });
-        return () => unregister("publicationDate");
-    }, [register, unregister])
     
     const onPublish = handleSubmit(content => {
         if(article && content.publicationDate) {
-            dispatch(publishArticleRequest({
+            dispatch(articleActions.publishArticleRequest({
                 id: article.id,
                 data: {
                     publicationDate: format(content.publicationDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") // manually set format to avoid timezone differences
@@ -62,34 +57,39 @@ export const ArticlePublishingForm: FunctionComponent<IArticlePublishingFormProp
 
     const onTakeOffline = () => {
         if(article) {
-            dispatch(takeArticleOfflineRequest({ id: article.id }));
+            dispatch(articleActions.takeArticleOfflineRequest({ id: article.id }));
         }
     }
 
-    const values = getValues();
     const publishedMessage = getPublishedMessage(article);
 
     return (
         <form noValidate autoComplete="off" onSubmit={onPublish}>
             <Box my={2}>
                 {article.state === 'DRAFT' && (
-                    <KeyboardDateTimePicker 
-                        id='publicationDate'
+                    <Controller 
+                        defaultValue={defaultValues.publicationDate}
+                        rules={{ required: true }}
                         name='publicationDate'
-                        label='Publication date'
-                        format='dd/MM/yyyy HH:mm'
-                        error={errors.hasOwnProperty('publicationDate')}
-                        helperText={errors.hasOwnProperty('publicationDate') && 'Must select a date'}
-                        value={values.publicationDate} 
-                        inputVariant="outlined"
-                        ampm={false}
-                        KeyboardButtonProps={{
-                            "aria-label": "select publication date"
-                        }}
-                        onChange={date => {
-                            setValue("publicationDate", date, true);
-                        }}>
-                    </KeyboardDateTimePicker>
+                        control={control}
+                        as={
+                            <KeyboardDateTimePicker 
+                                id='publicationDate'
+                                label='Publication date'
+                                format='dd/MM/yyyy HH:mm'
+                                error={errors.hasOwnProperty('publicationDate')}
+                                helperText={errors.hasOwnProperty('publicationDate') && 'Must select a date'}
+                                inputVariant="outlined"
+                                ampm={false}
+                                KeyboardButtonProps={{
+                                    "aria-label": "select publication date"
+                                }}
+                                onChange={() => null} // doesn't get called anyway; https://github.com/react-hook-form/react-hook-form/issues/438#issuecomment-633760140
+                                value="" // RHF controls it via defaultValue
+                                >
+                            </KeyboardDateTimePicker>
+                        }
+                    />
                 )}
                 {article.state === 'PUBLISHED' && (
                     <Alert severity='info'>{publishedMessage}</Alert>

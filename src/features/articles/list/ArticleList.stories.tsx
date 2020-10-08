@@ -4,17 +4,9 @@ import StoryRouter from 'storybook-react-router';
 import { ArticleList } from './ArticleList';
 import listData from '../__mockData__/list.json';
 import initialStoreState from '../../../app/initialStoreStateTesting';
-import { Provider } from 'react-redux';
-import { createStoreWithState } from '../../../testUtils/store';
+import { createTestUiWithProviders } from '../../../testUtils/store';
 
-const state = Object.assign(initialStoreState, {
-    entities: listData.entities,
-    articlesUi: {
-        list: {
-            listResult: listData.result
-        }
-    }
-});
+
 
 export default {
     component: ArticleList,
@@ -23,17 +15,18 @@ export default {
 }
 
 export const Default = () => {
-    return (
-        <Provider store={createStoreWithState(state)}>
-            <ArticleList  orderedArticleIds={listData.result} isLoading={false} />
-        </Provider>
-    )
+    const state = Object.assign(initialStoreState, {
+        entities: listData.entities,
+        articlesUi: {
+            list: {
+                listResult: listData.result
+            }
+        }
+    });
+    
+    return createTestUiWithProviders(<ArticleList orderedArticleIds={listData.result} isLoading={false} />, state);
 }
 
 export const Loading = () => {
-    return (
-        <Provider store={createStoreWithState(state)}>
-            <ArticleList orderedArticleIds={[]} isLoading={true} /> 
-        </Provider>
-    )
+    return <ArticleList orderedArticleIds={[]} isLoading={true} /> 
 }
