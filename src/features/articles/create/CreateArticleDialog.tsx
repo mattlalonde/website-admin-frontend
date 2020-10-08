@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { DialogContent, Dialog, DialogTitle, TextField, Button, CircularProgress, DialogActions, Box } from '@material-ui/core';
 
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import SaveIcon from '@material-ui/icons/Save';
 import { Alert } from '@material-ui/lab';
 import { ICreateArticleRequest } from '../apiRequests';
@@ -11,12 +11,13 @@ interface ICreateArticlePopupProps {
     onSubmit: (content: ICreateArticleRequest) => void;
     isPopupOpen: boolean;
     isCreating: boolean;
-    createArticleServerError: string | Error | null;
+    createArticleServerError?: string | Error | null;
 }
 
 export const CreateArticleDialog: FunctionComponent<ICreateArticlePopupProps> = ({handleClose, onSubmit, isPopupOpen, isCreating, createArticleServerError}) => {
 
     const { register, handleSubmit, errors } = useForm<ICreateArticleRequest>();
+    const handleSubmitFunc: SubmitHandler<ICreateArticleRequest> = data => onSubmit(data);
 
     return (
         <Dialog 
@@ -26,7 +27,7 @@ export const CreateArticleDialog: FunctionComponent<ICreateArticlePopupProps> = 
             maxWidth={'sm'}
             aria-labelledby='create-article-dialog-title'>
                 <DialogTitle id='create-article-dialog-title'>Create new article</DialogTitle>
-                <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+                <form noValidate autoComplete='off' onSubmit={handleSubmit(handleSubmitFunc)}>
                     <DialogContent>
                         <TextField 
                             inputRef={register({ required: true })}

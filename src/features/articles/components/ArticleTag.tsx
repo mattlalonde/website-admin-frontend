@@ -1,9 +1,10 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../app/store';
-import { removeTagFromArticleRequest } from '../details/articleDetailsSlice';
+
+import articleActions from '../articleActions';
 import tagActions from '../../tags/tagActions';
 import { Chip } from '@material-ui/core';
+import { getTagById } from '../../../entities/tagSelectors';
 
 interface IArticleTagProps {
     articleId: string;
@@ -13,10 +14,10 @@ interface IArticleTagProps {
 
 export const ArticleTag: FunctionComponent<IArticleTagProps> = ({articleId, tagId, removable}) => {
     const dispatch = useDispatch();
-    const tag = useSelector((state: RootState) => state.entities.tags[tagId]);
+    const tag = useSelector(getTagById(tagId));
 
     const onRemoveTag = (tagId: string) => {
-        dispatch(removeTagFromArticleRequest({
+        dispatch(articleActions.removeTagFromArticleRequest({
             id: articleId,
             data: {
                 tagId: tagId

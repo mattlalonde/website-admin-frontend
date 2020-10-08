@@ -1,14 +1,13 @@
 import React from 'react';
 
 import { LoginForm } from './LoginForm';
-import { Provider } from 'react-redux';
-import { createStoreWithState } from '../../../testUtils/store';
+import { createTestUiWithProviders } from '../../../testUtils/store';
 import { LoggedInState } from './LoggedInState';
 
 export default {
     component: LoginForm,
     title: 'Login Form',
-    decorators: [story => <Provider store={createStoreWithState({})}>{story()}</Provider>]
+    decorators: [story => createTestUiWithProviders(story())]
 }
 
 export const Default = () => {

@@ -19,7 +19,7 @@ export const ListLoading: FunctionComponent<IListLoadingProps> = (props: IListLo
     return <>
         {[...Array(config.itemCount)].map((_, idx) => {
             return <Box my={2} key={idx}>
-                    <Skeleton variant='rect' height={config.itemHeight} />
+                    <Skeleton variant='rect' height={config.itemHeight} data-testid='list-loading-skeleton' />
                 </Box>
         })}
     </>

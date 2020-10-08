@@ -21,6 +21,8 @@ export const TagListItem: FunctionComponent<ITagListItemProps> = ({ tagId }) => 
 
     const tag = useSelector((state: RootState) => state.entities.tags[tagId]);
 
+    if(!tag) return null;
+
     return (
         <NoUnderlineLink to={`/tag-details/${tag.id}`}>
             <ListItemContainer key={tag.id}> 
