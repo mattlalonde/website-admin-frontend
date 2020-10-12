@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import articleActions from '../articleActions';
 import tagActions from '../../tags/tagActions';
 import { Chip } from '@material-ui/core';
-import { getTagById } from '../../../entities/tagSelectors';
+import { getTagById } from '../../../entities/tagEntitySelectors';
 
 interface IArticleTagProps {
     articleId: string;

@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 
-import { RootState } from '../../../app/store';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 import { ArticleDetailsForm } from './ArticleDetailsForm';
 import { Tabs, Tab, LinearProgress, Chip } from '@material-ui/core';
@@ -12,6 +11,8 @@ import { ArticleStateType, IArticle } from '../models';
 import { ArticlePublishingForm } from './ArticlePublishingForm';
 import { ArticleTags } from './ArticleTags';
 import articleActions from '../articleActions';
+import { getArticleById } from '../../../entities/articleEntitySelectors';
+import { getArticleDetailsUI } from '../articleUiSelectors';
 
 enum ArticleTabView {
     Details = 0,
@@ -47,13 +48,13 @@ interface IArticleDetailsPageProps {}
 
 export const ArticleDetailsPage: FunctionComponent<IArticleDetailsPageProps> = (props) => {
 
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
 
     const [selectedTab, setSelectedTab] = useState(ArticleTabView.Details);
 
     const dispatch = useDispatch();
-    const { processingState } = useSelector((state: RootState) => state.articlesUi.details);
-    const article = useSelector((state: RootState) => state.entities.articles[id]);
+    const { processingState } = useSelector(getArticleDetailsUI());
+    const article = useSelector(getArticleById(id));
 
     const isProcessing = processingState !== ArticleDetailsProcessingState.None;
 
