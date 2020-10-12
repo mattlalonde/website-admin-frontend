@@ -7,7 +7,7 @@ import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import SaveIcon from '@material-ui/icons/Save';
 import { CreateTagDialog } from '../create/CreateTagDialog';
 import { RootState } from '../../../app/store';
-import { tagListByIdSelector } from '../../../entities/tagSelectors';
+import { tagListByIdSelector } from '../../../entities/tagEntitySelectors';
 
 
 interface IAddTagToContentProps{

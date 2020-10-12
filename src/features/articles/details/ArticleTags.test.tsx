@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, rootReducer } from '../../../testUtils';
+import { render, screen, rootReducer } from '../../../testUtils';
 import { ArticleTags } from './ArticleTags';
 import { createStore } from 'redux';
 
