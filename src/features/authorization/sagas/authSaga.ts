@@ -5,30 +5,35 @@ import actions from '../userActions';
 import * as auth from '../api';
 import * as errors from '../../errors/errorsSlice';
 import { ILoginResponse } from '../apiResponses';
-import { RootState } from '../../../app/store';
 import { LoggedInState } from '../login/LoggedInState';
 import { differenceInMilliseconds, isFuture } from 'date-fns';
 import { push } from 'connected-react-router';
+import { getLoggedInState, getTokenExpiresAt } from '../authSelectors';
+import { IApiResponse } from '../../../utils/api/http';
+import { defaultError } from '../../errors/models';
 
 function* initAuthorization() {
-    try {
-        const loginData: ILoginResponse = yield call(auth.refreshAccessToken);
-        yield put(actions.tryInitUserSuccess(loginData));
+    const response: IApiResponse<ILoginResponse> = yield call(auth.refreshAccessToken);
+    
+    if(response.ok && response.body) {
+        yield put(actions.tryInitUserSuccess(response.body));
     }
-    catch(error) {
+    else {
         yield put(actions.tryInitUserFailure());
     }
 }
 
 function* login(action) {
-    try {
-        const data: ILoginResponse = yield call(auth.login, action.payload);
-        yield put(actions.loginSuccess(data));
+
+    const response: IApiResponse<ILoginResponse> = yield call(auth.login, action.payload);
+
+    if(response.ok && response.body) {
+        yield put(actions.loginSuccess(response.body));
         yield put(push('/'));
     }
-    catch(error) {
+    else {
         yield put(actions.loginFailure());
-        yield put(errors.setError(error.apiErrorData));
+        yield put(errors.setError(response.error ?? defaultError));
     }
 }
 
@@ -36,21 +41,20 @@ function* logout() {
 
     // access token is removed when we call logout so we are logged out even on error
     // if there is an error refresh token might not be deleted on server
-    try {
-        yield call(auth.logout);
-    }
-    catch(error) { }
+    yield call(auth.logout);
 
     yield put(actions.logoutSuccess())
 }
 
 function* refreshToken() {
-    try {
-        const loginData: ILoginResponse = yield call(auth.refreshAccessToken);
-        yield put(actions.refreshAccessTokenSuccess(loginData));
+
+    const response: IApiResponse<ILoginResponse> = yield call(auth.refreshAccessToken);
+
+    if(response.ok && response.body) {
+        yield put(actions.refreshAccessTokenSuccess(response.body));
         return true;
     }
-    catch(error) {
+    else {
         return false;
     }
 }
@@ -61,7 +65,7 @@ function* refreshAccessTokenLoop() {
     let failedAttempts = 0;
 
     while(true) {
-        const tokenExpiresAt: number | null = yield select((state: RootState) => state.authorization.login.tokenExpiresAt);
+        const tokenExpiresAt: number | null = yield select(getTokenExpiresAt());
 
         if(tokenExpiresAt && isFuture(tokenExpiresAt)) {
             // start refresh before it expires
@@ -90,7 +94,7 @@ function* authSaga(action) {
 
     while(true) {
 
-        const loggedInState: LoggedInState = yield select((state: RootState) => state.authorization.login.loggedInState);
+        const loggedInState: LoggedInState = yield select(getLoggedInState());
 
         if(loggedInState !== LoggedInState.LoggedIn) {
             const loginCredentials = yield take(actions.loginRequest);

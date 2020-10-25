@@ -1,7 +1,6 @@
 import { IArticleListResponse, IArticleResponse } from './models';
-import * as http from '../../utils/http';
+import * as http from '../../utils/api/http';
 import { ICreateArticleRequest, IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest } from './apiRequests';
-import { ApiError } from '../../errors/ApiError';
 
 const root = "/api";
 
@@ -9,103 +8,53 @@ const root = "/api";
 export const createArticle = async (request: ICreateArticleRequest) => {
 
     const response = await http.post<IArticleResponse>(`${root}/article/create`, request);
-    
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-    
-    throw ApiError.create('API_ERROR', 'Unable to create article');
+    return response;
 }
 
 export const loadArticle = async (articleId: string) => {
 
     const response = await http.get<IArticleResponse>(`${root}/article/${articleId}`);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'Unable to find article');
+    return response;
 }
 
 export const loadArticles = async () => {
 
     const response = await http.get<IArticleListResponse>(`${root}/article/all`);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'Unable to find articles');
+    return response;
 }
 
 export const updateArticleContent = async (request: IUpdateArticleContentRequest) => {
     
     const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/update`, request.data);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to make sure the article was updated.');
+    return response;
 }
 
 export const deleteArticle = async(request: IDeleteArticleRequest) => {
     const response = await http.del<IArticleResponse>(`${root}/article/${request.id}`);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+    return response;
 }
 
 export const reinstateArticle = async(request: IReinstateArticleRequest) => {
     const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/reinstate`);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+    return response;
 }
 
 export const publishArticle = async (request: IPublishArticleRequest) => {
     const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/publish`, request.data);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+    return response;
 }
 
 export const takeArticleOffline = async (request: ITakeArticleOfflineRequest) => {
     const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/takeoffline`);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+    return response;
 }
 
 export const addTagToArticle = async (request: IAddTagToArticleRequest) => {
     const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/addtag`, request.data);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+    return response;
 }
 
 export const removeTagFromArticle = async (request: IRemoveTagFromArticleRequest) => {
     const response = await http.put<IArticleResponse>(`${root}/article/${request.id}/removetag`, request.data);
-
-    if(response.parsedBody) {
-        return response.parsedBody;
-    }
-
-    throw ApiError.create('API_ERROR', 'No article was returned, please refresh the page to ensure the article state has been updated.');
+    return response;
 }

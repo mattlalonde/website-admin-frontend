@@ -4,15 +4,18 @@ import tagActions from '../tagActions';
 import * as errors from '../../errors/errorsSlice';
 import * as api from '../api';
 import { ITag } from '../models';
+import { IApiResponse } from '../../../utils/api/http';
+import { defaultError } from '../../errors/models';
 
 function* updateTagSaga(action) {
-    try {
-        const data: ITag = yield call(api.updateTag, action.payload);
-        yield put(tagActions.updateTagSuccess(data));
+    const response: IApiResponse<ITag> = yield call(api.updateTag, action.payload);
+
+    if(response.ok && response.body) {
+        yield put(tagActions.updateTagSuccess(response.body));
     }
-    catch(error) {
+    else {
         yield put(tagActions.updateTagFailed());
-        yield put(errors.setError(error.apiErrorData));
+        yield put(errors.setError(response.error ?? defaultError));
     }
 }
 

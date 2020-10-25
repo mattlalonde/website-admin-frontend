@@ -50,9 +50,9 @@ export const AddTagToContent: FunctionComponent<IAddTagToContentProps> = ({addTa
             setLoading(true);
             if(!selectedValue && searchTerm) {
                 try {
-                    const tags = await searchTags({searchTerm: searchTerm.trim(), excludeIds: currentTagIds});
-                    if(active) {
-                        setOptions(tags);
+                    const tagsResponse = await searchTags({searchTerm: searchTerm.trim(), excludeIds: currentTagIds});
+                    if(active && tagsResponse.ok && tagsResponse.body) {
+                        setOptions(tagsResponse.body);
                     }
                 }
                 catch(error) {

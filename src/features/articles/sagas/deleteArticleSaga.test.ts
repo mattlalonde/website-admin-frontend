@@ -5,13 +5,12 @@ import createRootReducer from '../../../app/rootReducer';
 import * as errors from '../../errors/errorsSlice';
 import { deleteArticle } from '../api';
 import draftArticle from '../__mockData__/draftArticle.json';
-import { throwError } from 'redux-saga-test-plan/providers';
 import { IArticle, IArticleResponse } from '../models';
-import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import articleActions from '../articleActions';
 import initialStoreState from '../../../app/initialStoreStateTesting';
 import { RootState } from '../../../app/store';
+import { IApiResponse } from '../../../utils/api/http';
 
 describe('delete article saga', () => {
     it('delete article failed should set error and not update areticle', () => {
@@ -23,16 +22,23 @@ describe('delete article saga', () => {
             }
         });
 
-        const error = ApiError.create('delete error', 'something went wrong');
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: false,
+            status: 500,
+            error: {
+                type: 'ApiError',
+                message: 'error'
+            }
+        }
 
         return expectSaga(watchDeleteArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(deleteArticle), throwError(error)]
+                    [matchers.call.fn(deleteArticle), apiResponse]
                 ])
-                .put(articleActions.articleDetailsActionFailed(error.apiErrorData))
-                .put(errors.setError(error.apiErrorData))
+                .put(articleActions.articleDetailsActionFailed())
+                .put(errors.setError(apiResponse.error!))
                 .dispatch(articleActions.deleteArticleRequest({ id: draftArticle.id }))
                 .silentRun()
                 .then(result => {
@@ -42,7 +48,7 @@ describe('delete article saga', () => {
                     expect(store.articlesUi.details.processingState).toEqual(ArticleDetailsProcessingState.None);
                     expect(store.entities.articles[draftArticle.id]).toEqual(draftArticle);
                     expect(store.errors.isErrorPopupOpen).toEqual(true);
-                    expect(store.errors.error).toEqual(error.apiErrorData);
+                    expect(store.errors.error).toEqual(apiResponse.error);
                 });
     });
 
@@ -66,12 +72,17 @@ describe('delete article saga', () => {
             tags: {}
         }
 
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: true,
+            status: 200,
+            body: articleResponse
+        }
 
         return expectSaga(watchDeleteArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(deleteArticle), articleResponse]
+                    [matchers.call.fn(deleteArticle), apiResponse]
                 ])
                 .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.deleteArticleRequest({ id: draftArticle.id }))

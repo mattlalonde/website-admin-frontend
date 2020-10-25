@@ -5,15 +5,18 @@ import * as errors from '../../errors/errorsSlice';
 
 import { addTagToArticle } from '../api';
 import { IArticleResponse } from '../models';
+import { IApiResponse } from '../../../utils/api/http';
+import { defaultError } from '../../errors/models';
 
 function* addTagToArticleSaga(action) {
-    try {
-        const data: IArticleResponse = yield call(addTagToArticle, action.payload);
-        yield put(actions.articleDetailsActionSuccess(data));        
+    const response: IApiResponse<IArticleResponse> = yield call(addTagToArticle, action.payload);
+
+    if(response.ok && response.body) {
+        yield put(actions.articleDetailsActionSuccess(response.body));  
     }
-    catch(error) {
-        yield put(actions.articleDetailsActionFailed(error.apiErrorData));
-        yield put(errors.setError(error.apiErrorData));
+    else {
+        yield put(actions.articleDetailsActionFailed());
+        yield put(errors.setError(response.error ?? defaultError));
     }
 }
 

@@ -5,26 +5,33 @@ import { loadArticles } from '../api';
 import articleList from '../__mockData__/list.json';
 import { throwError } from 'redux-saga-test-plan/providers';
 import { IArticleListResponse } from '../models';
-import { ApiError } from '../../../errors/ApiError';
 import createRootReducer from '../../../app/rootReducer'; 
 import articleActions from '../articleActions';
 import * as errors from '../../errors/errorsSlice';
 import { RootState } from '../../../app/store';
+import { IApiResponse } from '../../../utils/api/http';
 
 
 describe('load article list saga', () => {
 
     it('puts failed action on error and updates store', () => {
 
-        const error = ApiError.create('load error', 'something went wrong');
+        const apiResponse: IApiResponse<IArticleListResponse> = {
+            ok: false,
+            status: 500,
+            error: {
+                type: 'ApiError',
+                message: 'error'
+            }
+        }
 
         return expectSaga(watchLoadArticlesSaga)
                 .withReducer(createRootReducer())
                 .provide([
-                    [matchers.call.fn(loadArticles), throwError(error)]
+                    [matchers.call.fn(loadArticles), apiResponse]
                 ])
                 .put(articleActions.loadArticlesFailed())
-                .put(errors.setError(error.apiErrorData))
+                .put(errors.setError(apiResponse.error!))
                 .dispatch(articleActions.loadArticlesRequest())
                 .silentRun()
                 .then(result => {
@@ -34,15 +41,21 @@ describe('load article list saga', () => {
                     expect(store.entities.articles).toEqual({});
                     expect(store.articlesUi.list.result).toEqual([]);
                     expect(store.errors.isErrorPopupOpen).toEqual(true);
-                    expect(store.errors.error).toEqual(error.apiErrorData);
+                    expect(store.errors.error).toEqual(apiResponse.error);
                 });
     });
 
     it('calls the api and updates the store', () => {
+        const apiResponse: IApiResponse<IArticleListResponse> = {
+            ok: true,
+            status: 200,
+            body: articleList as IArticleListResponse
+        }
+
         return expectSaga(watchLoadArticlesSaga)
                 .withReducer(createRootReducer())
                 .provide([
-                    [matchers.call.fn(loadArticles), articleList]
+                    [matchers.call.fn(loadArticles), apiResponse]
                 ])
                 .put(articleActions.loadArticlesSuccess(articleList as IArticleListResponse))
                 .dispatch(articleActions.loadArticlesRequest())

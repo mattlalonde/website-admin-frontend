@@ -4,16 +4,19 @@ import * as actions from '../list/articleListSlice';
 import * as errors from '../../errors/errorsSlice';
 import { loadArticles } from '../api';
 import { IArticleListResponse } from '../models';
+import { IApiResponse } from '../../../utils/api/http';
+import { defaultError } from '../../errors/models';
 
 
 function* loadArticlesSaga() {
-    try {
-        const data: IArticleListResponse = yield call(loadArticles);
-        yield put(actions.loadArticlesSuccess(data));
+    const response : IApiResponse<IArticleListResponse> = yield call(loadArticles);
+
+    if(response.ok && response.body) {
+        yield put(actions.loadArticlesSuccess(response.body));
     }
-    catch(error) {
+    else {
         yield put(actions.loadArticlesFailed());
-        yield put(errors.setError(error.apiErrorData));
+        yield put(errors.setError(response.error ?? defaultError));
     }
 }
 

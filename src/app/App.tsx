@@ -15,7 +15,7 @@ import './App.css';
 import { Container } from '@material-ui/core';
 import { NavBar } from '../components/NavBar/NavBar';
 import { theme } from './theme';
-import { GlobalError } from '../components/GlobalError/GlobalError';
+import { GlobalError } from '../features/errors/dialog/GlobalError';
 import userActions from '../features/authorization/userActions';
 import { LoggedInState } from '../features/authorization/login/LoggedInState';
 
