@@ -7,16 +7,22 @@ import articleActions from '../articleActions';
 import * as errors from '../../errors/errorsSlice';
 import { RootState } from '../../../app/store';
 import initialStoreState from '../../../app/initialStoreStateTesting';
-import { ApiError } from '../../../errors/ApiError';
-import { throwError } from 'redux-saga-test-plan/providers';
 import draftArticle from '../__mockData__/draftArticle.json';
 import tag from '../__mockData__/tag.json';
 import { IArticle, IArticleResponse } from '../models';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
+import { IApiResponse } from '../../../utils/api/http';
 
 describe('remove article tag saga', () => {
     it('puts failed action on error and updates store', () => {
-        const error = ApiError.create('test error', 'something went wrong');
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: false,
+            status: 500,
+            error: {
+                type: 'ApiError',
+                message: 'error'
+            }
+        }
 
         const draftArticleWithTag = {
             ...draftArticle,
@@ -40,10 +46,10 @@ describe('remove article tag saga', () => {
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(removeTagFromArticle), throwError(error)]
+                    [matchers.call.fn(removeTagFromArticle), apiResponse]
                 ])
-                .put(articleActions.articleDetailsActionFailed(error.apiErrorData))
-                .put(errors.setError(error.apiErrorData))
+                .put(articleActions.articleDetailsActionFailed())
+                .put(errors.setError(apiResponse.error!))
                 .dispatch(articleActions.removeTagFromArticleRequest({
                     id: draftArticleWithTag.id,
                     data: {
@@ -56,7 +62,7 @@ describe('remove article tag saga', () => {
 
                     expect(store.entities.articles[draftArticleWithTag.id]).toEqual(draftArticleWithTag);
                     expect(store.errors.isErrorPopupOpen).toEqual(true);
-                    expect(store.errors.error).toEqual(error.apiErrorData);
+                    expect(store.errors.error).toEqual(apiResponse.error);
                 });
     });
 
@@ -84,11 +90,17 @@ describe('remove article tag saga', () => {
             tags: {}
         }
 
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: true,
+            status: 200,
+            body: articleResponse
+        }
+
         return expectSaga(watchRemoveTagFromArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(removeTagFromArticle), articleResponse]
+                    [matchers.call.fn(removeTagFromArticle), apiResponse]
                 ])
                 .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.removeTagFromArticleRequest({

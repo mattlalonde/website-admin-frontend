@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IApiErrorData } from '../../errors/ApiError';
+import { IErrorData } from './models';
 
 export interface IErrorState {
-    error: IApiErrorData | null;
+    error: IErrorData | null;
     isErrorPopupOpen: boolean;
 }
 
@@ -15,7 +15,7 @@ const errorSlice = createSlice({
     name: 'error',
     initialState,
     reducers: {
-        setError(state, action: PayloadAction<IApiErrorData>) {
+        setError(state, action: PayloadAction<IErrorData>) {
             state.error = action.payload;
             state.isErrorPopupOpen = true;
         },

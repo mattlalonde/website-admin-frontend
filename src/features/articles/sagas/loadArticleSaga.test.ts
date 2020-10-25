@@ -3,26 +3,32 @@ import * as matchers from 'redux-saga-test-plan/matchers';
 import { watchLoadArticleSaga } from './loadArticleSaga';
 import { loadArticle } from '../api';
 import draftArticle from '../__mockData__/draftArticle.json';
-import { throwError } from 'redux-saga-test-plan/providers';
 import { IArticle, IArticleResponse } from '../models';
-import { ApiError } from '../../../errors/ApiError';
 import createRootReducer from '../../../app/rootReducer'; 
 import articleActions from '../articleActions';
 import * as errors from '../../errors/errorsSlice';
 import { RootState } from '../../../app/store';
 import initialStoreState from '../../../app/initialStoreStateTesting';
+import { IApiResponse } from '../../../utils/api/http';
 
 describe('load article saga', () => {
     it('puts failed action on error and updates store', () => {
-        const error = ApiError.create('test error', 'something went wrong');
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: false,
+            status: 500,
+            error: {
+                type: 'ApiError',
+                message: 'error'
+            }
+        }
 
         return expectSaga(watchLoadArticleSaga)
                 .withReducer(createRootReducer())
                 .provide([
-                    [matchers.call.fn(loadArticle), throwError(error)]
+                    [matchers.call.fn(loadArticle), apiResponse]
                 ])
-                .put(articleActions.articleDetailsActionFailed(error.apiErrorData))
-                .put(errors.setError(error.apiErrorData))
+                .put(articleActions.articleDetailsActionFailed())
+                .put(errors.setError(apiResponse.error!))
                 .dispatch(articleActions.loadArticleRequest('test'))
                 .silentRun()
                 .then(result => {
@@ -30,7 +36,7 @@ describe('load article saga', () => {
 
                     expect(store.entities.articles).toEqual({});
                     expect(store.errors.isErrorPopupOpen).toEqual(true);
-                    expect(store.errors.error).toEqual(error.apiErrorData);
+                    expect(store.errors.error).toEqual(apiResponse.error);
                 });
     });
 
@@ -41,10 +47,16 @@ describe('load article saga', () => {
             tags: {}
         }
 
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: true,
+            status: 200,
+            body: articleResponse
+        }
+
         return expectSaga(watchLoadArticleSaga)
                 .withReducer(createRootReducer())
                 .provide([
-                    [matchers.call.fn(loadArticle), articleResponse]
+                    [matchers.call.fn(loadArticle), apiResponse]
                 ])
                 .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.loadArticleRequest('test'))
@@ -78,11 +90,17 @@ describe('load article saga', () => {
             tags: {}
         }
 
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: true,
+            status: 200,
+            body: articleResponse
+        }
+
         return expectSaga(watchLoadArticleSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(loadArticle), articleResponse]
+                    [matchers.call.fn(loadArticle), apiResponse]
                 ])
                 .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.loadArticleRequest('test'))

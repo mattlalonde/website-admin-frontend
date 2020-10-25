@@ -3,15 +3,14 @@ import * as matchers from 'redux-saga-test-plan/matchers';
 import { watchTakeArticleOfflineSaga } from './takeArticleOfflineSaga';
 import { takeArticleOffline } from '../api';
 import publishedArticle from '../__mockData__/publishedArticle.json';
-import { throwError } from 'redux-saga-test-plan/providers';
 import { IArticle, IArticleResponse } from '../models';
-import { ApiError } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from '../details/ArticleDetailsProcessingState';
 import createRootReducer from '../../../app/rootReducer'; 
 import articleActions from '../articleActions';
 import * as errors from '../../errors/errorsSlice';
 import { RootState } from '../../../app/store';
 import initialStoreState from '../../../app/initialStoreStateTesting';
+import { IApiResponse } from '../../../utils/api/http';
 
 describe('take article offline saga', () => {
     it('failure should set error and not update article', () => {
@@ -23,16 +22,23 @@ describe('take article offline saga', () => {
             }
         });
 
-        const error = ApiError.create('take article offline error', 'something went wrong');
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: false,
+            status: 500,
+            error: {
+                type: 'ApiError',
+                message: 'error'
+            }
+        }
 
         return expectSaga(watchTakeArticleOfflineSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(takeArticleOffline), throwError(error)]
+                    [matchers.call.fn(takeArticleOffline), apiResponse]
                 ])
-                .put(articleActions.articleDetailsActionFailed(error.apiErrorData))
-                .put(errors.setError(error.apiErrorData))
+                .put(articleActions.articleDetailsActionFailed())
+                .put(errors.setError(apiResponse.error!))
                 .dispatch(articleActions.takeArticleOfflineRequest({ id: publishedArticle.id }))
                 .silentRun()
                 .then(result => {
@@ -42,7 +48,7 @@ describe('take article offline saga', () => {
                     expect(store.entities.articles[publishedArticle.id]).toEqual(publishedArticle);
                     expect(store.articlesUi.details.processingState).toEqual(ArticleDetailsProcessingState.None);
                     expect(store.errors.isErrorPopupOpen).toEqual(true);
-                    expect(store.errors.error).toEqual(error.apiErrorData);
+                    expect(store.errors.error).toEqual(apiResponse.error);
                 });
     });
 
@@ -66,12 +72,17 @@ describe('take article offline saga', () => {
             tags: {}
         }
 
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: true,
+            status: 200,
+            body: articleResponse
+        }
 
         return expectSaga(watchTakeArticleOfflineSaga)
                 .withReducer(createRootReducer())
                 .withState(initialState)
                 .provide([
-                    [matchers.call.fn(takeArticleOffline), articleResponse]
+                    [matchers.call.fn(takeArticleOffline), apiResponse]
                 ])
                 .put(articleActions.articleDetailsActionSuccess(articleResponse))
                 .dispatch(articleActions.takeArticleOfflineRequest({ id: publishedArticle.id }))

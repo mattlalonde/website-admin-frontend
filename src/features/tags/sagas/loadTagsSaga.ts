@@ -4,15 +4,18 @@ import tagActions from '../tagActions';
 import * as errors from '../../errors/errorsSlice';
 import { loadTags } from '../api';
 import { ITagListResponse } from '../models';
+import { IApiResponse } from '../../../utils/api/http';
+import { defaultError } from '../../errors/models';
 
 function* loadTagsSaga() {
-    try { 
-        const data: ITagListResponse = yield call(loadTags);
-        yield put(tagActions.loadTagsSuccess(data));
+    const response: IApiResponse<ITagListResponse> = yield call(loadTags);
+
+    if(response.ok && response.body) {
+        yield put(tagActions.loadTagsSuccess(response.body));
     }
-    catch(error) {
-        yield put(tagActions.loadTagsFailed())
-        yield put(errors.setError(error.apiErrorData));
+    else {
+        yield put(tagActions.loadTagsFailed());
+        yield put(errors.setError(response.error ?? defaultError));
     }
 }
 

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticleResponse } from '../models';
 import { IUpdateArticleContentRequest, IDeleteArticleRequest, IReinstateArticleRequest, IPublishArticleRequest, ITakeArticleOfflineRequest, IAddTagToArticleRequest, IRemoveTagFromArticleRequest, ICreateTagAndAddToArticleRequest } from '../apiRequests';
-import { IApiErrorData } from '../../../errors/ApiError';
 import { ArticleDetailsProcessingState } from './ArticleDetailsProcessingState';
 
 export interface IArticleDetailsState {
@@ -43,7 +42,7 @@ const articleDetails = createSlice({
         articleDetailsActionSuccess(state, action: PayloadAction<IArticleResponse>) {
             state.processingState = ArticleDetailsProcessingState.None;
         },
-        articleDetailsActionFailed(state, action: PayloadAction<IApiErrorData>) {
+        articleDetailsActionFailed(state) {
             state.processingState = ArticleDetailsProcessingState.None;
         },
         createTagAndAddToArticleRequest(state, action: PayloadAction<ICreateTagAndAddToArticleRequest>) {

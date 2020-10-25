@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticleResponse } from '../models';
 import { ICreateArticleRequest } from '../apiRequests';
-import { IApiErrorData } from '../../../errors/ApiError';
+import { IErrorData } from '../../errors/models';
 
 export interface IArticleCreateState {
     isPopupOpen: boolean;
@@ -33,9 +33,9 @@ const articleCreateSlice = createSlice({
             state.isCreating = false;
             state.createArticleServerError = null;
         },
-        createArticleFailed(state, action: PayloadAction<IApiErrorData>) {
+        createArticleFailed(state, action: PayloadAction<IErrorData>) {
             state.isCreating = false;
-            state.createArticleServerError = action.payload.apierror.message;
+            state.createArticleServerError = action.payload.message;
         }
     }
 });

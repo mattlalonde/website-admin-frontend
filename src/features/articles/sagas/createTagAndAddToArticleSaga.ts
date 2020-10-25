@@ -2,14 +2,14 @@ import { takeLatest, put, race, take, select } from 'redux-saga/effects';
 
 import articleActions from '../articleActions';
 import tagActions from '../../tags/tagActions';
-import { RootState } from '../../../app/store';
 import { IArticle } from '../models';
 import { ICreateTagAndAddToArticleRequest } from '../apiRequests';
 import { PayloadAction } from '@reduxjs/toolkit';
+import { getArticleById } from '../../../entities/articleEntitySelectors';
 
 function* createTagAndAddToArticleSaga(action: PayloadAction<ICreateTagAndAddToArticleRequest>) {
 
-    const article: IArticle = yield select((state: RootState) => state.entities.articles[action.payload.id]);
+    const article: IArticle = yield select(getArticleById(action.payload.id));
 
     yield put(tagActions.openCreateTagPopup({ 
         createTagName: action.payload.data.tagName,

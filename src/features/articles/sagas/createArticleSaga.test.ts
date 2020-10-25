@@ -12,20 +12,27 @@ import initialStoreState from '../../../app/initialStoreStateTesting';
 import createdArticle from '../__mockData__/createdArticle.json';
 import articleList from '../__mockData__/list.json';
 import { IArticle, IArticleResponse } from '../models';
-import { ApiError } from '../../../errors/ApiError';
 import { RootState } from '../../../app/store';
+import { IApiResponse } from '../../../utils/api/http';
 
 describe('create article saga', () => {
 
     it('puts failed action on error and updates store', () => {
-        const error = ApiError.create('API_ERROR', 'Unable to create article')
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: false,
+            status: 500,
+            error: {
+                type: 'ApiError',
+                message: 'error'
+            }
+        }
 
         return expectSaga(watchCreateArticleSaga)
                 .withReducer(createRootReducer())
                 .provide([
-                    [matchers.call.fn(createArticle), throwError(error)]
+                    [matchers.call.fn(createArticle), apiResponse]
                 ])
-                .put(articleActions.createArticleFailed(error.apiErrorData))
+                .put(articleActions.createArticleFailed(apiResponse.error!))
                 .dispatch(articleActions.createArticleRequest({ title: 'new article title'}))
                 .silentRun()
                 .then(result => {
@@ -35,7 +42,7 @@ describe('create article saga', () => {
                     expect(state.articlesUi.create).toEqual({
                         isPopupOpen: false,
                         isCreating: false,
-                        createArticleServerError: error.apiErrorData.apierror.message
+                        createArticleServerError: apiResponse.error!.message
                     });
 
                     expect(state.entities.articles).toEqual({});
@@ -61,11 +68,17 @@ describe('create article saga', () => {
             article: newArticle,
             tags: {}
         };
+
+        const apiResponse: IApiResponse<IArticleResponse> = {
+            ok: true,
+            status: 200,
+            body: articleResponse
+        }
         
         return expectSaga(watchCreateArticleSaga)
                 .withReducer(createRootReducer(), storeState)
                 .provide([
-                    [matchers.call.fn(createArticle), articleResponse]
+                    [matchers.call.fn(createArticle), apiResponse]
                 ])
                 .put(articleActions.createArticleSuccess(articleResponse))
                 .put(articleActions.closeCreateArticlePopup())

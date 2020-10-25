@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { DialogContent, Dialog, DialogTitle, Button, DialogActions, Box, withStyles } from '@material-ui/core';
-import { IApiErrorData } from '../../errors/ApiError';
 
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import { SubErrorList } from './SubErrorList';
+import { IErrorData } from '../models';
 
 
 interface IErrorDialogPopupProps {
     handleClose: () => void;
-    error: IApiErrorData;
+    error: IErrorData;
     open: boolean;
 }
 
@@ -34,19 +34,14 @@ export const ErrorDialog: FunctionComponent<IErrorDialogPopupProps> = ({handleCl
                 </ErrorDialogTitle>
                 <DialogContent>
                     <Box my={2}>
-                        <strong>Status:</strong> {error.apierror.status}
+                        <strong>{error.type}</strong>
                     </Box>
                     <Box my={2}>
-                        {error.apierror.message}
+                        {error.message}
                     </Box>
-                    {error.apierror.debugMessage && (
+                    {error.subErrors && error.subErrors.length > 0 && (
                         <Box my={2}>
-                            {error.apierror.debugMessage}
-                        </Box>
-                    )}
-                    {error.apierror.subErrors && error.apierror.subErrors.length > 0 && (
-                        <Box my={2}>
-                            <SubErrorList subErrors={error.apierror.subErrors} />
+                            <SubErrorList subErrors={error.subErrors} />
                         </Box>
                     )}
                 </DialogContent>

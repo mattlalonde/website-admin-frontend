@@ -4,16 +4,20 @@ import { push } from 'connected-react-router';
 import articleActions from '../articleActions';
 import { createArticle } from '../api';
 import { IArticleResponse } from '../models';
+import { IApiResponse } from '../../../utils/api/http';
+import { defaultError } from '../../errors/models';
 
 function* createArticleSaga(action) {
-    try {
-        const data: IArticleResponse = yield call(createArticle, action.payload);
-        yield put(articleActions.createArticleSuccess(data));
+
+    const response: IApiResponse<IArticleResponse> = yield call(createArticle, action.payload);
+
+    if(response.ok && response.body){
+        yield put(articleActions.createArticleSuccess(response.body));
         yield put(articleActions.closeCreateArticlePopup());
-        yield put(push(`/article-details/${data.article.id}`));
+        yield put(push(`/article-details/${response.body.article.id}`));
     }
-    catch(error) {
-        yield put(articleActions.createArticleFailed(error.apiErrorData));
+    else {
+        yield put(articleActions.createArticleFailed(response.error ?? defaultError));
     }
 }
 
